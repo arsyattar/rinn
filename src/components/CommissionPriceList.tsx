@@ -45,7 +45,7 @@ const pricingPlans: PricingPlan[] = [
       'High-resolution PNG file',
     ],
     waTemplate:
-      'Halo Amai Vaelithys! Saya ingin memesan komisi paket *Bust Up* (Rp 80.000).',
+      'Hello Amai Vaelithys! I would like to order a *Bust Up* commission (Rp 80.000).',
   },
   {
     id: 'genshin-icon',
@@ -61,7 +61,7 @@ const pricingPlans: PricingPlan[] = [
       'Square & transparent high-res PNG',
     ],
     waTemplate:
-      'Halo Amai Vaelithys! Saya ingin memesan komisi paket *Genshin Avatar Icon* (Rp 100.000).',
+      'Hello Amai Vaelithys! I would like to order a *Genshin Avatar Icon* commission (Rp 100.000).',
   },
   {
     id: 'half-body',
@@ -75,7 +75,7 @@ const pricingPlans: PricingPlan[] = [
       'High-res PNG + transparent background',
     ],
     waTemplate:
-      'Halo Amai Vaelithys! Saya ingin memesan komisi paket *Half Body* (Rp 150.000).',
+      'Hello Amai Vaelithys! I would like to order a *Half Body* commission (Rp 150.000).',
   },
   {
     id: 'full-body',
@@ -90,7 +90,7 @@ const pricingPlans: PricingPlan[] = [
       'High-res PNG + transparent background',
     ],
     waTemplate:
-      'Halo Amai Vaelithys! Saya ingin memesan komisi paket *Full Body* (Rp 200.000).',
+      'Hello Amai Vaelithys! I would like to order a *Full Body* commission (Rp 200.000).',
   },
   {
     id: 'charasheet-simple',
@@ -106,7 +106,7 @@ const pricingPlans: PricingPlan[] = [
       'Ideal for VTuber / OC design reference',
     ],
     waTemplate:
-      'Halo Amai Vaelithys! Saya ingin memesan komisi paket *Character Sheet (Simple)* (Start from Rp 250.000).',
+      'Hello Amai Vaelithys! I would like to order a *Character Sheet (Simple)* commission (Start from Rp 250.000).',
   },
   {
     id: 'genshin-drip',
@@ -123,7 +123,7 @@ const pricingPlans: PricingPlan[] = [
       'Ultra high-res PNG + transparent',
     ],
     waTemplate:
-      'Halo Amai Vaelithys! Saya ingin memesan komisi paket *Genshin Drip Marketing* (Rp 260.000).',
+      'Hello Amai Vaelithys! I would like to order a *Genshin Drip Marketing* commission (Rp 260.000).',
   },
   {
     id: 'charasheet-overdetailed',
@@ -140,7 +140,7 @@ const pricingPlans: PricingPlan[] = [
       'Lore summary & character specs',
     ],
     waTemplate:
-      'Halo Amai Vaelithys! Saya ingin memesan komisi paket *Character Sheet Overdetailed* (Start from Rp 500.000).',
+      'Hello Amai Vaelithys! I would like to order a *Character Sheet (Overdetailed)* commission (Start from Rp 500.000).',
   },
 ];
 
