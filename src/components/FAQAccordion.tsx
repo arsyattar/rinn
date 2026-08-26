@@ -36,7 +36,6 @@ const faqs: FAQItem[] = [
 ];
 
 export default function FAQAccordion() {
-  // Store open items (allow multiple to be open or toggle individually)
   const [openIds, setOpenIds] = useState<number[]>([]);
 
   const toggleFAQ = (id: number) => {
@@ -53,7 +52,7 @@ export default function FAQAccordion() {
         return (
           <div
             key={faq.id}
-            className={`faq-item card-royal ${isOpen ? 'faq-item-open' : ''}`}
+            className={`faq-item ${isOpen ? 'faq-item-open' : ''}`}
           >
             <button
               type="button"
@@ -70,7 +69,7 @@ export default function FAQAccordion() {
               <motion.div
                 className="faq-icon-wrap"
                 animate={{ rotate: isOpen ? 180 : 0 }}
-                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
               >
                 <CaretDown size={18} weight="bold" />
               </motion.div>
@@ -80,19 +79,17 @@ export default function FAQAccordion() {
               {isOpen && (
                 <motion.div
                   key="content"
-                  initial={{ height: 0, opacity: 0, scaleY: 0.9 }}
-                  animate={{ height: 'auto', opacity: 1, scaleY: 1 }}
-                  exit={{ height: 0, opacity: 0, scaleY: 0.9 }}
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
                   transition={{
-                    height: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
-                    opacity: { duration: 0.3, ease: 'easeOut' },
-                    scaleY: { duration: 0.35, ease: [0.16, 1, 0.3, 1] },
+                    height: { duration: 0.32, ease: [0.25, 1, 0.5, 1] },
+                    opacity: { duration: 0.22, ease: 'easeOut' },
                   }}
-                  style={{ transformOrigin: 'top center', overflow: 'hidden' }}
                   className="faq-answer-wrapper"
                 >
                   <div className="faq-answer-inner">
-                    <div className="faq-answer-divider"></div>
+                    <div className="faq-answer-divider" />
                     <p className="faq-answer-text">{faq.answer}</p>
                   </div>
                 </motion.div>
@@ -116,9 +113,12 @@ export default function FAQAccordion() {
         .faq-item {
           padding: 0;
           overflow: hidden;
-          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-          border: 1px solid var(--color-border-subtle);
           background: #FFFFFF;
+          border-radius: 1.25rem;
+          border: 1px solid var(--color-border-subtle);
+          box-shadow: 0 4px 20px rgba(30, 42, 69, 0.04);
+          transition: border-color 0.25s ease, box-shadow 0.25s ease;
+          box-sizing: border-box;
         }
 
         .faq-item:hover {
@@ -127,7 +127,7 @@ export default function FAQAccordion() {
 
         .faq-item-open {
           border-color: var(--color-primary);
-          box-shadow: 0 12px 32px rgba(201, 166, 107, 0.16);
+          box-shadow: 0 10px 28px rgba(201, 166, 107, 0.14);
         }
 
         .faq-question-btn {
@@ -142,6 +142,7 @@ export default function FAQAccordion() {
           text-align: left;
           gap: 1rem;
           user-select: none;
+          box-sizing: border-box;
         }
 
         @media (min-width: 640px) {
@@ -196,7 +197,7 @@ export default function FAQAccordion() {
           background: var(--color-surface-soft);
           border: 1px solid var(--color-border-subtle);
           flex-shrink: 0;
-          transition: background-color 0.2s ease;
+          transition: background-color 0.2s ease, border-color 0.2s ease;
         }
 
         .faq-item-open .faq-icon-wrap {
@@ -206,16 +207,19 @@ export default function FAQAccordion() {
 
         .faq-answer-wrapper {
           width: 100%;
+          overflow: hidden;
+          will-change: height, opacity;
+          box-sizing: border-box;
         }
 
         .faq-answer-inner {
-          padding: 0 1.35rem 1.45rem 1.35rem;
-          position: relative;
+          padding: 0 1.35rem 1.35rem 1.35rem;
+          box-sizing: border-box;
         }
 
         @media (min-width: 640px) {
           .faq-answer-inner {
-            padding: 0 1.75rem 1.75rem 1.75rem;
+            padding: 0 1.75rem 1.65rem 1.75rem;
           }
         }
 
@@ -223,7 +227,7 @@ export default function FAQAccordion() {
           width: 100%;
           height: 1px;
           background: linear-gradient(90deg, var(--color-primary) 0%, rgba(201, 166, 107, 0.15) 100%);
-          margin-bottom: 1.1rem;
+          margin-bottom: 1rem;
         }
 
         .faq-answer-text {
