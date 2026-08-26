@@ -1,0 +1,506 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar';
+import HeroSection from '../components/HeroSection';
+import ScrollRevealSection from '../components/ScrollRevealSection';
+import WorkCarousel from '../components/WorkCarousel';
+import FAQAccordion from '../components/FAQAccordion';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout>
+	<Navbar client:load />
+
+	<main class="page-content">
+		{/* Hero Section */}
+		<HeroSection client:load />
+
+		{/* 1. Gallery Section — Horizontal Loop Carousel */}
+		<ScrollRevealSection
+			client:visible
+			id="gallery"
+			badge="Featured Gallery"
+			title="Some of My Works"
+			subtitle="Swipe through bespoke character concepts, model sheets, and fantasy artwork."
+		>
+			<WorkCarousel client:visible />
+		</ScrollRevealSection>
+
+		{/* 2. About / Character Profile Section */}
+		<ScrollRevealSection
+			client:visible
+			id="about"
+			badge="Character Dossier"
+			title="About Me"
+			subtitle="Official profile, character specifications, and origin lore of Amai Vaelithys."
+		>
+			<div class="about-card card-royal genshin-oc-card">
+				<div class="genshin-decor-bg"></div>
+				<div class="genshin-oc-grid">
+					{/* Left: Genshin Character Card Frame */}
+					<div class="genshin-card-col">
+						<div class="genshin-card-stack">
+							<div class="genshin-shadow-card"></div>
+							<div class="genshin-main-card">
+								<div class="genshin-corner-ornament top-left">✦</div>
+								<div class="genshin-corner-ornament top-right">✦</div>
+								<div class="genshin-corner-ornament bottom-left">✦</div>
+								<div class="genshin-corner-ornament bottom-right">✦</div>
+								<div class="genshin-avatar-inner">
+									<img src="/photo/profil_amai.png" alt="Amai Vaelithys Genshin OC" class="genshin-avatar-img" />
+								</div>
+							</div>
+						</div>
+
+						{/* 5 Stars Rating & Role */}
+						<div class="genshin-stars-row">
+							<div class="stars-gold">
+								<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+							</div>
+							<div class="role-badge">
+								<span class="element-icon">❄️</span>
+								<span class="role-text">Cryo Healer</span>
+							</div>
+						</div>
+					</div>
+
+					{/* Right: Character Info & Lore */}
+					<div class="genshin-info-col">
+						<div class="oc-specs-list">
+							<div class="oc-spec-row">
+								<span class="oc-spec-label">Name</span>
+								<span class="oc-spec-colon">:</span>
+								<span class="oc-spec-value">
+									<strong class="oc-main-name">Amai Vaelithys</strong>
+									<span class="oc-alias">Nereida Astra</span>
+								</span>
+							</div>
+							<div class="oc-spec-row">
+								<span class="oc-spec-label">Age</span>
+								<span class="oc-spec-colon">:</span>
+								<span class="oc-spec-value">Physically 24 (2000+)</span>
+							</div>
+							<div class="oc-spec-row">
+								<span class="oc-spec-label">Birthday</span>
+								<span class="oc-spec-colon">:</span>
+								<span class="oc-spec-value">29th September</span>
+							</div>
+							<div class="oc-spec-row">
+								<span class="oc-spec-label">Height</span>
+								<span class="oc-spec-colon">:</span>
+								<span class="oc-spec-value">165cm</span>
+							</div>
+							<div class="oc-spec-row">
+								<span class="oc-spec-label">Affiliation</span>
+								<span class="oc-spec-colon">:</span>
+								<span class="oc-spec-value highlight-affiliation">Knight of Favonious</span>
+							</div>
+						</div>
+
+						<div class="oc-lore-box">
+							<p class="oc-lore-text">
+								A foreigner who decided to settle in Mondstadt and join the Knight of Favonious solely to study alchemy.
+							</p>
+						</div>
+
+						<div class="oc-extra-badges">
+							<span class="oc-pill">Mondstadt Resident</span>
+							<span class="oc-pill">Alchemical Scholar</span>
+							<span class="oc-pill">Ancient Celestial Lineage</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</ScrollRevealSection>
+
+		{/* 3. FAQ Section */}
+		<ScrollRevealSection
+			client:visible
+			id="faq"
+			badge="Common Questions"
+			title="Frequently Asked Inquiries"
+			subtitle="Everything you need to know about the illustration workflow, turnaround times, and file delivery."
+		>
+			<FAQAccordion client:visible />
+		</ScrollRevealSection>
+
+		{/* 5. Contact Section */}
+		<ScrollRevealSection
+			client:visible
+			id="contact"
+			badge="Initiate Order"
+			title="Let’s Create Something Celestial"
+			subtitle="Have a character in mind or an upcoming project? Reach out through the channels below to book your commission slot."
+		>
+			<div class="contact-box card-royal">
+				<div class="contact-single-card">
+					<div class="contact-item">
+						<span class="contact-label">TikTok Direct Message</span>
+						<a href="https://www.tiktok.com/@cat.bedo29" target="_blank" rel="noopener noreferrer" class="contact-link">@cat.bedo29</a>
+					</div>
+				</div>
+				<div class="contact-action">
+					<a href="https://www.tiktok.com/@cat.bedo29" target="_blank" rel="noopener noreferrer" class="btn-primary">
+						<span>Order Commission via TikTok</span>
+					</a>
+				</div>
+			</div>
+		</ScrollRevealSection>
+	</main>
+
+	<Footer />
+</Layout>
+
+<style>
+	.page-content {
+		width: 100%;
+		max-width: 100%;
+		overflow-x: clip;
+		box-sizing: border-box;
+	}
+
+	/* ============================================
+	   GENSHIN OC INTRODUCTION CARD
+	============================================ */
+	.genshin-oc-card {
+		padding: 1.5rem 1.25rem;
+		max-width: 980px;
+		margin: 0 auto;
+		width: 100%;
+		box-sizing: border-box;
+		position: relative;
+		background: linear-gradient(135deg, #FFFFFF 0%, #F5F9FB 60%, #EBF4F7 100%);
+		border: 1.5px solid var(--color-border-gold);
+		box-shadow: 0 16px 40px rgba(30, 42, 69, 0.08), 0 4px 12px rgba(201, 166, 107, 0.12);
+	}
+
+	@media (min-width: 768px) {
+		.genshin-oc-card {
+			padding: 2.75rem 2.5rem;
+		}
+	}
+
+	.genshin-oc-grid {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		gap: 2rem;
+		align-items: center;
+		width: 100%;
+	}
+
+	@media (min-width: 820px) {
+		.genshin-oc-grid {
+			grid-template-columns: 280px minmax(0, 1fr);
+			gap: 3.25rem;
+		}
+	}
+
+	/* Left Card Column */
+	.genshin-card-col {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		width: 100%;
+	}
+
+	.genshin-card-stack {
+		position: relative;
+		width: 100%;
+		max-width: 230px;
+		margin: 0 auto 1rem auto;
+	}
+
+	@media (min-width: 820px) {
+		.genshin-card-stack {
+			max-width: 260px;
+		}
+	}
+
+	/* Tilted shadow card behind main frame */
+	.genshin-shadow-card {
+		position: absolute;
+		inset: 0;
+		background: #1A2338;
+		border-radius: 1.4rem;
+		transform: rotate(-4deg) translateY(4px) scale(0.98);
+		z-index: 0;
+		box-shadow: 0 8px 20px rgba(30, 42, 69, 0.25);
+		border: 1.5px solid rgba(201, 166, 107, 0.5);
+	}
+
+	/* Main framed card */
+	.genshin-main-card {
+		position: relative;
+		z-index: 1;
+		width: 100%;
+		aspect-ratio: 1 / 1.22;
+		background: linear-gradient(180deg, #E6F4F7 0%, #D4EDF2 100%);
+		border: 3px solid #8B7355;
+		outline: 2px solid #C9A66B;
+		border-radius: 1.4rem;
+		overflow: hidden;
+		box-shadow: 0 10px 24px rgba(30, 42, 69, 0.15);
+		display: flex;
+		align-items: flex-end;
+		justify-content: center;
+	}
+
+	.genshin-corner-ornament {
+		position: absolute;
+		font-size: 0.65rem;
+		color: #C9A66B;
+		z-index: 3;
+		pointer-events: none;
+		line-height: 1;
+	}
+
+	.genshin-corner-ornament.top-left { top: 6px; left: 8px; }
+	.genshin-corner-ornament.top-right { top: 6px; right: 8px; }
+	.genshin-corner-ornament.bottom-left { bottom: 6px; left: 8px; }
+	.genshin-corner-ornament.bottom-right { bottom: 6px; right: 8px; }
+
+	.genshin-avatar-inner {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		align-items: flex-start;
+		justify-content: center;
+	}
+
+	.genshin-avatar-img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: center top;
+	}
+
+	/* 5 Stars Rating */
+	.genshin-stars-row {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.25rem;
+		margin-bottom: 0.85rem;
+	}
+
+	.stars-gold {
+		display: flex;
+		gap: 0.15rem;
+		color: #F5B041;
+		font-size: 1.45rem;
+		letter-spacing: 0.05em;
+		text-shadow: 0 0 10px rgba(245, 176, 65, 0.65);
+		line-height: 1;
+	}
+
+	.role-badge {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3rem;
+		font-size: 0.78rem;
+		font-weight: 700;
+		color: #4A7A8C;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+	}
+
+	.element-icon {
+		font-size: 0.85rem;
+	}
+
+	/* Right Info Column */
+	.genshin-info-col {
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+		width: 100%;
+	}
+
+	.oc-specs-list {
+		display: grid;
+		grid-template-columns: auto auto 1fr;
+		gap: 0.65rem 0.5rem;
+		align-items: baseline;
+		width: 100%;
+	}
+
+	@media (min-width: 640px) {
+		.oc-specs-list {
+			gap: 0.8rem 0.75rem;
+		}
+	}
+
+	.oc-spec-row {
+		display: contents;
+	}
+
+	.oc-spec-label {
+		font-family: var(--font-serif);
+		font-weight: 700;
+		color: #1A365D;
+		letter-spacing: 0.02em;
+		white-space: nowrap;
+		font-size: 0.95rem;
+	}
+
+	.oc-spec-colon {
+		font-family: var(--font-serif);
+		font-weight: 700;
+		color: #1A365D;
+		font-size: 0.95rem;
+		padding: 0 0.1rem;
+		text-align: center;
+	}
+
+	@media (min-width: 768px) {
+		.oc-spec-label,
+		.oc-spec-colon {
+			font-size: 1.15rem;
+		}
+	}
+
+	.oc-spec-value {
+		font-weight: 600;
+		color: #2C4260;
+		font-size: 0.95rem;
+		line-height: 1.4;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 0.35rem;
+	}
+
+	@media (min-width: 768px) {
+		.oc-spec-value {
+			font-size: 1.15rem;
+		}
+	}
+
+	.oc-main-name {
+		color: #1A365D;
+		font-weight: 800;
+	}
+
+	.oc-alias {
+		font-size: 0.82rem;
+		color: #7B8BA2;
+		font-weight: 500;
+		font-style: italic;
+	}
+
+	.highlight-affiliation {
+		color: #1A365D;
+		font-weight: 700;
+	}
+
+	/* Story Lore Box */
+	.oc-lore-box {
+		background: rgba(255, 255, 255, 0.85);
+		border-left: 3.5px solid var(--color-primary);
+		border-radius: 0 0.85rem 0.85rem 0;
+		padding: 1.1rem 1.25rem;
+		box-shadow: 0 4px 14px rgba(30, 42, 69, 0.05);
+	}
+
+	.oc-lore-text {
+		font-size: 0.96rem;
+		color: #2D415E;
+		line-height: 1.7;
+		font-style: italic;
+		margin: 0;
+	}
+
+	@media (min-width: 768px) {
+		.oc-lore-text {
+			font-size: 1.05rem;
+		}
+	}
+
+	.oc-extra-badges {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		margin-top: 0.35rem;
+		justify-content: center;
+		width: 100%;
+	}
+
+	.oc-pill {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.3rem 0.75rem;
+		background: #EFF6F8;
+		border: 1px solid rgba(90, 147, 160, 0.3);
+		border-radius: 9999px;
+		font-size: 0.75rem;
+		font-weight: 600;
+		color: #3B6B78;
+		letter-spacing: 0.02em;
+	}
+
+	/* Contact Box */
+	.contact-box {
+		max-width: 600px;
+		margin: 0 auto;
+		padding: 1.5rem 1.25rem;
+		text-align: center;
+		width: 100%;
+		box-sizing: border-box;
+	}
+
+	@media (min-width: 640px) {
+		.contact-box {
+			padding: 2.25rem 2rem;
+		}
+	}
+
+	.contact-single-card {
+		display: flex;
+		justify-content: center;
+		margin-bottom: 1.75rem;
+		width: 100%;
+	}
+
+	.contact-item {
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+		background: var(--color-surface-soft);
+		border: 1px solid var(--color-border-subtle);
+		padding: 1.1rem 1.5rem;
+		border-radius: 0.95rem;
+		width: 100%;
+		max-width: 360px;
+		box-shadow: var(--shadow-sm);
+	}
+
+	.contact-label {
+		font-size: 0.72rem;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		color: var(--color-text-gold);
+		font-weight: 700;
+	}
+
+	.contact-link {
+		font-size: 1.05rem;
+		font-weight: 700;
+		color: var(--color-secondary);
+		word-break: break-all;
+	}
+
+	.contact-link:hover {
+		color: var(--color-primary);
+	}
+
+	.contact-action {
+		display: flex;
+		justify-content: center;
+		width: 100%;
+	}
+
+	.contact-action .btn-primary {
+		width: 100%;
+		max-width: 320px;
+	}
+</style>

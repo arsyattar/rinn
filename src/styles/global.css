@@ -1,0 +1,259 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,500;0,700;1,400;1,600&display=swap');
+
+:root {
+  /* Albedo Color Palette Tokens */
+  --color-primary: #C9A66B;       /* Antique Gold */
+  --color-primary-hover: #b89354;
+  --color-primary-light: #e6d3af;
+  --color-primary-subtle: #f4ecdc;
+  
+  --color-secondary: #1E2A45;     /* Navy Deep */
+  --color-secondary-hover: #162035;
+  --color-secondary-light: #2a395c;
+  
+  --color-bg: #F7F3EA;            /* Warm Cream */
+  --color-bg-alt: #EFE8D8;        /* Deeper Warm Cream */
+  
+  --color-surface: #FFFFFF;       /* Off-White Card */
+  --color-surface-soft: #FAF7F0;  /* Soft Warm Surface */
+  --color-surface-gold: #FBF7EE;  /* Gold-tinted card */
+  
+  --color-text: #3A4257;          /* Slate Navy (Body) */
+  --color-text-muted: #6B7280;    /* Muted Slate */
+  --color-text-heading: #1E2A45;  /* Deep Navy (Headings) */
+  --color-text-gold: #A98344;     /* Deep Antique Gold text */
+  
+  --color-border: #B9BEC9;        /* Silver Gray */
+  --color-border-subtle: #E2DDD3; /* Subtle Cream Border */
+  --color-border-gold: rgba(201, 166, 107, 0.4);
+  
+  --color-accent: #5A93A0;        /* Teal Ice */
+  --color-accent-subtle: #EBF4F6;
+  --color-accent-glow: rgba(90, 147, 160, 0.25);
+
+  /* Typography */
+  --font-serif: 'Cinzel', 'Playfair Display', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-accent: 'Playfair Display', serif;
+
+  /* Shadows & Elevations */
+  --shadow-sm: 0 2px 8px rgba(30, 42, 69, 0.04), 0 1px 2px rgba(30, 42, 69, 0.02);
+  --shadow-md: 0 8px 24px rgba(30, 42, 69, 0.06), 0 2px 6px rgba(201, 166, 107, 0.08);
+  --shadow-lg: 0 16px 40px rgba(30, 42, 69, 0.09), 0 4px 12px rgba(201, 166, 107, 0.12);
+  --shadow-gold: 0 8px 28px rgba(201, 166, 107, 0.28);
+  --shadow-inner-gold: inset 0 1px 0 rgba(255, 255, 255, 0.8), inset 0 -1px 0 rgba(201, 166, 107, 0.2);
+
+  /* Transitions */
+  --transition-fast: 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-smooth: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-bounce: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  /* scroll-behavior is set to 'smooth' after page load via JS to avoid blocking instant scroll-to-top */
+  scroll-behavior: auto;
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-size: 16px;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-color: var(--color-bg);
+  background-image: 
+    radial-gradient(circle at 15% 15%, rgba(201, 166, 107, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 85% 65%, rgba(90, 147, 160, 0.04) 0%, transparent 40%),
+    linear-gradient(to bottom, transparent, rgba(239, 232, 216, 0.3));
+  position: relative;
+}
+
+/* Custom Selection */
+::selection {
+  background-color: var(--color-primary-light);
+  color: var(--color-secondary);
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+  border: 2px solid var(--color-bg);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+/* Base Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+  color: var(--color-text-heading);
+  line-height: 1.25;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+p {
+  color: var(--color-text);
+  line-height: 1.7;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+/* Utility Containers */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* Royal Ornamental & Gold Badges */
+.badge-gold {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.85rem;
+  background-color: var(--color-primary-subtle);
+  border: 1px solid var(--color-border-gold);
+  color: var(--color-text-gold);
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.gold-ornament {
+  display: inline-block;
+  color: var(--color-primary);
+  opacity: 0.75;
+}
+
+/* Primary Royal Button */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.6rem;
+  background-color: var(--color-primary);
+  color: var(--color-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: var(--shadow-gold), var(--shadow-inner-gold);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(201, 166, 107, 0.38);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Secondary Button */
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.6rem;
+  background-color: var(--color-surface);
+  color: var(--color-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  border: 1px solid var(--color-border-subtle);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-surface-soft);
+  border-color: var(--color-primary);
+  color: var(--color-text-gold);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Surface Card Styles */
+.card-royal {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 1.25rem;
+  padding: 1.25rem;
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+}
+
+@media (min-width: 640px) {
+  .card-royal {
+    padding: 1.75rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .card-royal {
+    padding: 2rem;
+  }
+}
+
+.card-royal:hover {
+  border-color: var(--color-border-gold);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-3px);
+}
+

@@ -1,0 +1,58 @@
+---
+import '../styles/global.css';
+
+interface Props {
+	title?: string;
+	description?: string;
+}
+
+const {
+	title = "Amai Vaelithys — Illustrator & Visual Artist Portfolio",
+	description = "Official portfolio of Amai Vaelithys. Explore illustration works, character designs, and commission services.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		<meta name="description" content={description} />
+
+		<!-- Force scroll to top before anything renders -->
+		<script is:inline>
+		  if ('scrollRestoration' in history) {
+		    history.scrollRestoration = 'manual';
+		  }
+		  // Strip any hash from URL so browser doesn't jump to anchor
+		  if (window.location.hash) {
+		    history.replaceState(null, '', window.location.pathname);
+		  }
+		  window.scrollTo(0, 0);
+		</script>
+
+		<!-- Preconnect to Google Fonts -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	</head>
+	<body>
+		<slot />
+
+		<script is:inline>
+		  // After DOM ready, force scroll to top again to override any late hash jumping
+		  document.addEventListener('DOMContentLoaded', function () {
+		    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+		    // Belt-and-suspenders: also fire after first paint
+		    requestAnimationFrame(function () {
+		      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+		      // Enable smooth scrolling only AFTER we've locked to top
+		      document.documentElement.style.scrollBehavior = 'smooth';
+		    });
+		  });
+		</script>
+	</body>
+</html>
