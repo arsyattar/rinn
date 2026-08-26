@@ -329,27 +329,29 @@ export default function CommissionPriceList() {
               viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.5 }}
             >
-              {/* Badge if available */}
-              {plan.badge && (
-                <div className="pricing-badge-wrap">
+              {/* Badge placeholder wrap so all titles start at identical vertical level */}
+              <div className="pricing-badge-wrap">
+                {plan.badge ? (
                   <span className="pricing-badge">
                     <Sparkle size={12} weight="fill" />
                     <span>{plan.badge}</span>
                   </span>
-                </div>
-              )}
+                ) : (
+                  <span className="pricing-badge-empty" />
+                )}
+              </div>
 
-              {/* Card Header */}
+              {/* Card Header with unified heights */}
               <div className="pricing-header">
                 <h3 className="pricing-title">{plan.name}</h3>
                 <p className="pricing-subtitle">{plan.subtitle}</p>
               </div>
 
-              {/* Price Display */}
+              {/* Price Display with unified note line */}
               <div className="pricing-price-wrap">
-                {plan.priceNote && (
-                  <span className="pricing-price-note">{plan.priceNote}</span>
-                )}
+                <span className="pricing-price-note">
+                  {plan.priceNote || '\u00A0'}
+                </span>
                 <div className="pricing-price-val">{plan.price}</div>
               </div>
 
@@ -533,12 +535,24 @@ export default function CommissionPriceList() {
             grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 1.75rem;
           }
+
+          .pricing-card:last-child {
+            grid-column: 1 / -1;
+            max-width: 480px;
+            width: 100%;
+            justify-self: center;
+          }
         }
 
         @media (min-width: 1024px) {
           .pricing-grid {
             grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 2rem;
+          }
+
+          .pricing-card:last-child {
+            grid-column: 2;
+            max-width: 100%;
           }
         }
 
@@ -547,12 +561,12 @@ export default function CommissionPriceList() {
           background: #FFFFFF;
           border-radius: 1.5rem;
           border: 1.5px solid var(--color-border-subtle);
-          padding: 1.6rem 1.4rem;
+          padding: 1.4rem 1.25rem;
           display: flex;
           flex-direction: column;
           position: relative;
           box-sizing: border-box;
-          gap: 1rem;
+          gap: 0.75rem;
           transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
                       border-color 0.3s ease,
                       box-shadow 0.3s ease;
@@ -560,7 +574,7 @@ export default function CommissionPriceList() {
 
         @media (min-width: 768px) {
           .pricing-card {
-            padding: 1.75rem 1.5rem;
+            padding: 1.5rem 1.35rem;
           }
         }
 
@@ -582,7 +596,15 @@ export default function CommissionPriceList() {
 
         /* Badge */
         .pricing-badge-wrap {
-          margin-bottom: 0.25rem;
+          min-height: 22px;
+          display: flex;
+          align-items: center;
+          margin-bottom: 0.15rem;
+        }
+
+        .pricing-badge-empty {
+          display: block;
+          height: 22px;
         }
 
         .pricing-badge {
@@ -596,28 +618,36 @@ export default function CommissionPriceList() {
           color: var(--color-text-gold);
           background: var(--color-primary-subtle);
           border: 1px solid var(--color-border-gold);
-          padding: 0.2rem 0.65rem;
+          padding: 0.15rem 0.6rem;
           border-radius: 9999px;
         }
 
         /* Header */
         .pricing-header {
-          margin-bottom: 0.25rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.2rem;
         }
 
         .pricing-title {
           font-family: var(--font-serif);
-          font-size: 1.3rem;
+          font-size: 1.2rem;
           font-weight: 700;
           color: var(--color-secondary);
           line-height: 1.25;
-          margin: 0 0 0.3rem 0;
+          margin: 0;
+        }
+
+        @media (min-width: 1024px) {
+          .pricing-title {
+            font-size: 1.22rem;
+          }
         }
 
         .pricing-subtitle {
-          font-size: 0.82rem;
+          font-size: 0.8rem;
           color: var(--color-text-muted);
-          line-height: 1.4;
+          line-height: 1.35;
           margin: 0;
         }
 
@@ -625,22 +655,25 @@ export default function CommissionPriceList() {
         .pricing-price-wrap {
           display: flex;
           flex-direction: column;
-          gap: 0.15rem;
-          padding-bottom: 0.85rem;
+          gap: 0.1rem;
+          padding-bottom: 0.65rem;
           border-bottom: 1px solid var(--color-border-subtle);
+          justify-content: flex-end;
         }
 
         .pricing-price-note {
-          font-size: 0.72rem;
+          font-size: 0.7rem;
           font-weight: 600;
           color: var(--color-text-muted);
           text-transform: uppercase;
           letter-spacing: 0.05em;
+          min-height: 14px;
+          line-height: 1.2;
         }
 
         .pricing-price-val {
           font-family: var(--font-serif);
-          font-size: 1.65rem;
+          font-size: 1.6rem;
           font-weight: 700;
           color: var(--color-text-gold);
           line-height: 1;
@@ -1008,6 +1041,9 @@ export default function CommissionPriceList() {
 
         .terms-item-full {
           grid-column: 1 / -1;
+          width: 100%;
+          max-width: 520px;
+          justify-self: center;
         }
 
         .terms-dodont-group {
