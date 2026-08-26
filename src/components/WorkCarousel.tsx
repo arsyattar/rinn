@@ -9,6 +9,8 @@ interface WorkItem {
   description: string;
 }
 
+// direction: 1 = entering from right (go forward), -1 = entering from left (go back)
+
 const works: WorkItem[] = [
   {
     id: 1,
@@ -31,18 +33,21 @@ let slideCounter = 0;
 export default function WorkCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [slideKey, setSlideKey] = useState(0);
+  const [direction, setDirection] = useState(1); // 1 = from right, -1 = from left
   const [isPaused, setIsPaused] = useState(false);
   const [cardHeight, setCardHeight] = useState<number | string>('auto');
   const cardRef = useRef<HTMLDivElement>(null);
 
   const goToNext = () => {
     slideCounter += 1;
+    setDirection(1);
     setCurrentIndex((prev) => (prev + 1) % works.length);
     setSlideKey(slideCounter);
   };
 
   const goToPrev = () => {
     slideCounter += 1;
+    setDirection(-1);
     setCurrentIndex((prev) => (prev - 1 + works.length) % works.length);
     setSlideKey(slideCounter);
   };
@@ -74,14 +79,14 @@ export default function WorkCarousel() {
     };
   }, []);
 
-  // Drag gesture
+  // Drag gesture — left drag = next, right drag = prev
   const handleDragEnd = (_: any, info: { offset: { x: number }; velocity: { x: number } }) => {
     setIsPaused(false);
     const threshold = 50;
     if (info.offset.x < -threshold || info.velocity.x < -350) {
-      goToNext();
+      goToNext(); // swipe left → next slide enters from right
     } else if (info.offset.x > threshold || info.velocity.x > 350) {
-      goToNext();
+      goToPrev(); // swipe right → prev slide enters from left
     }
   };
 
@@ -93,6 +98,10 @@ export default function WorkCarousel() {
     damping: 34,
     mass: 0.9,
   };
+
+  // Enter/exit based on direction
+  const enterX = direction === 1 ? '100%' : '-100%';
+  const exitX  = direction === 1 ? '-100%' : '100%';
 
   return (
     <div className="carousel-wrapper">
@@ -114,9 +123,9 @@ export default function WorkCarousel() {
           <motion.div
             key={slideKey}
             ref={slideKey === 0 ? cardRef : undefined}
-            initial={{ x: '100%' }}
+            initial={{ x: enterX }}
             animate={{ x: 0 }}
-            exit={{ x: '-100%' }}
+            exit={{ x: exitX }}
             transition={transition}
             drag="x"
             dragConstraints={{ left: 0, right: 0 }}
