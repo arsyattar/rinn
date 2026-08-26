@@ -10,6 +10,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   { label: 'About', href: '#about' },
   { label: 'Pricing', href: '#contact' },
+  { label: 'Testimonials', href: '#testimonials' },
   { label: 'FAQ', href: '#faq' },
 ];
 

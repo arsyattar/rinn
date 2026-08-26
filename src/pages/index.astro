@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 import HeroSection from '../components/HeroSection';
 import ScrollRevealSection from '../components/ScrollRevealSection';
 import CommissionPriceList from '../components/CommissionPriceList';
+import TestimonialCarousel from '../components/TestimonialCarousel';
 import FAQAccordion from '../components/FAQAccordion';
 import Footer from '../components/Footer.astro';
 ---
@@ -112,7 +113,18 @@ import Footer from '../components/Footer.astro';
 			<CommissionPriceList client:visible />
 		</ScrollRevealSection>
 
-		{/* 3. FAQ Section */}
+		{/* 3. Client Testimonials Section */}
+		<ScrollRevealSection
+			client:visible
+			id="testimonials"
+			badge="Client Feedback"
+			title="Kind Words from Patrons"
+			subtitle="Read what previous commissioners have shared about their custom artwork and experience."
+		>
+			<TestimonialCarousel client:visible />
+		</ScrollRevealSection>
+
+		{/* 4. FAQ Section */}
 		<ScrollRevealSection
 			client:visible
 			id="faq"
