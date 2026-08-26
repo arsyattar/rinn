@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { CaretLeft, CaretRight } from '@phosphor-icons/react';
 
@@ -26,25 +26,33 @@ const works: WorkItem[] = [
   },
 ];
 
-// Unique key per transition so AnimatePresence always animates correctly even on loop
-let transitionKey = 0;
+let slideCounter = 0;
 
 export default function WorkCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [slideKey, setSlideKey] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [cardHeight, setCardHeight] = useState<number | string>('auto');
+  const cardRef = useRef<HTMLDivElement>(null);
 
-  // Always goes right — new slide enters from right, old exits to left
   const goToNext = () => {
+    slideCounter += 1;
     setCurrentIndex((prev) => (prev + 1) % works.length);
-    setSlideKey((k) => k + 1);
+    setSlideKey(slideCounter);
   };
 
   const goToPrev = () => {
-    // Still animates right-to-left visually (same direction), just changes index backwards
+    slideCounter += 1;
     setCurrentIndex((prev) => (prev - 1 + works.length) % works.length);
-    setSlideKey((k) => k + 1);
+    setSlideKey(slideCounter);
   };
+
+  // Measure card height after mount so the stage has fixed height (no layout shift)
+  useEffect(() => {
+    if (cardRef.current) {
+      setCardHeight(cardRef.current.offsetHeight);
+    }
+  }, []);
 
   // Auto-swipe every 4 seconds
   useEffect(() => {
@@ -53,7 +61,7 @@ export default function WorkCarousel() {
     return () => clearInterval(timer);
   }, [isPaused, currentIndex]);
 
-  // Window-level release handler
+  // Window-level release
   useEffect(() => {
     const handleRelease = () => setIsPaused(false);
     window.addEventListener('mouseup', handleRelease);
@@ -66,73 +74,64 @@ export default function WorkCarousel() {
     };
   }, []);
 
-  // Drag handling — always swipe right direction
+  // Drag gesture
   const handleDragEnd = (_: any, info: { offset: { x: number }; velocity: { x: number } }) => {
     setIsPaused(false);
     const threshold = 50;
     if (info.offset.x < -threshold || info.velocity.x < -350) {
       goToNext();
     } else if (info.offset.x > threshold || info.velocity.x > 350) {
-      goToNext(); // even dragging backwards still moves forward
+      goToNext();
     }
   };
 
   const currentWork = works[currentIndex];
 
-  // Always enter from right, exit to left
-  const slideVariants = {
-    enter: {
-      x: 80,
-      opacity: 0,
-      scale: 0.96,
-    },
-    center: {
-      x: 0,
-      opacity: 1,
-      scale: 1,
-      transition: {
-        x: { type: 'spring' as const, stiffness: 320, damping: 30 },
-        opacity: { duration: 0.28, ease: 'easeOut' },
-        scale: { duration: 0.28, ease: 'easeOut' },
-      },
-    },
-    exit: {
-      x: -80,
-      opacity: 0,
-      scale: 0.96,
-      transition: {
-        x: { type: 'spring' as const, stiffness: 320, damping: 30 },
-        opacity: { duration: 0.2, ease: 'easeIn' },
-        scale: { duration: 0.2, ease: 'easeIn' },
-      },
-    },
+  const transition = {
+    type: 'spring' as const,
+    stiffness: 340,
+    damping: 34,
+    mass: 0.9,
   };
 
   return (
     <div className="carousel-wrapper">
-      {/* Overflow clip container */}
+      {/*
+        Stage: position relative + overflow hidden + fixed height.
+        Cards inside are position absolute so they overlap during transition.
+        mode="sync" means exit and enter run at the same time — no blank frame.
+      */}
       <div
         className="carousel-stage"
+        style={{ height: cardHeight === 'auto' ? 'auto' : cardHeight }}
         onMouseDown={() => setIsPaused(true)}
         onMouseUp={() => setIsPaused(false)}
         onTouchStart={() => setIsPaused(true)}
         onTouchEnd={() => setIsPaused(false)}
         onTouchCancel={() => setIsPaused(false)}
       >
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="sync">
           <motion.div
             key={slideKey}
-            variants={slideVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
+            ref={slideKey === 0 ? cardRef : undefined}
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '-100%' }}
+            transition={transition}
             drag="x"
             dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={0.15}
+            dragElastic={0.12}
             onDragStart={() => setIsPaused(true)}
             onDragEnd={handleDragEnd}
             className="carousel-card card-royal"
-            style={{ cursor: 'grab' }}
+            style={{
+              position: slideKey === 0 ? 'relative' : 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              cursor: 'grab',
+              willChange: 'transform',
+            }}
           >
             {/* Image */}
             <div className="carousel-img-wrap">
@@ -176,8 +175,9 @@ export default function WorkCarousel() {
               type="button"
               className={`pagination-dot ${index === currentIndex ? 'active' : ''}`}
               onClick={() => {
+                slideCounter += 1;
                 setCurrentIndex(index);
-                setSlideKey((k) => k + 1);
+                setSlideKey(slideCounter);
               }}
               aria-label={`Go to artwork ${index + 1}`}
             />
@@ -203,25 +203,19 @@ export default function WorkCarousel() {
           position: relative;
         }
 
-        /* Clip overflow so slide transitions stay inside */
+        /* Stage clips the sliding cards */
         .carousel-stage {
           position: relative;
           width: 100%;
-          min-height: 420px;
           overflow: hidden;
           border-radius: 1.4rem;
           touch-action: pan-y;
+          /* Ensure background shows between slides - use same bg as cards */
+          background: #FFFFFF;
         }
 
-        @media (min-width: 768px) {
-          .carousel-stage {
-            min-height: 520px;
-          }
-        }
-
-        /* Card */
+        /* Card Layout */
         .carousel-card {
-          width: 100%;
           background: #FFFFFF;
           border-radius: 1.4rem;
           border: 1.5px solid var(--color-border-gold);
