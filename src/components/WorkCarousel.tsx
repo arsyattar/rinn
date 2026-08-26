@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, useMotionValue, animate } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { CaretLeft, CaretRight } from '@phosphor-icons/react';
 
 interface WorkItem {
@@ -26,41 +26,39 @@ const works: WorkItem[] = [
   },
 ];
 
+// Unique key per transition so AnimatePresence always animates correctly even on loop
+let transitionKey = 0;
+
 export default function WorkCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [slideKey, setSlideKey] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
 
-  const nextSlide = () => {
+  // Always goes right — new slide enters from right, old exits to left
+  const goToNext = () => {
     setCurrentIndex((prev) => (prev + 1) % works.length);
+    setSlideKey((k) => k + 1);
   };
 
-  const prevSlide = () => {
+  const goToPrev = () => {
+    // Still animates right-to-left visually (same direction), just changes index backwards
     setCurrentIndex((prev) => (prev - 1 + works.length) % works.length);
+    setSlideKey((k) => k + 1);
   };
 
-  // Auto-swipe every 4 seconds, pause strictly when pressed/held
+  // Auto-swipe every 4 seconds
   useEffect(() => {
-    if (isPaused || isDragging) return;
-
-    const timer = setInterval(() => {
-      nextSlide();
-    }, 4000);
-
+    if (isPaused) return;
+    const timer = setInterval(goToNext, 4000);
     return () => clearInterval(timer);
-  }, [isPaused, isDragging, currentIndex]);
+  }, [isPaused, currentIndex]);
 
-  // Window-level safety to ensure unpause when mouse or touch is released anywhere
+  // Window-level release handler
   useEffect(() => {
-    const handleRelease = () => {
-      setIsPaused(false);
-      setIsDragging(false);
-    };
-
+    const handleRelease = () => setIsPaused(false);
     window.addEventListener('mouseup', handleRelease);
     window.addEventListener('touchend', handleRelease);
     window.addEventListener('touchcancel', handleRelease);
-
     return () => {
       window.removeEventListener('mouseup', handleRelease);
       window.removeEventListener('touchend', handleRelease);
@@ -68,74 +66,96 @@ export default function WorkCarousel() {
     };
   }, []);
 
+  // Drag handling — always swipe right direction
   const handleDragEnd = (_: any, info: { offset: { x: number }; velocity: { x: number } }) => {
-    setIsDragging(false);
     setIsPaused(false);
-    const swipeThreshold = 50;
-    if (info.offset.x < -swipeThreshold || info.velocity.x < -350) {
-      nextSlide();
-    } else if (info.offset.x > swipeThreshold || info.velocity.x > 350) {
-      prevSlide();
+    const threshold = 50;
+    if (info.offset.x < -threshold || info.velocity.x < -350) {
+      goToNext();
+    } else if (info.offset.x > threshold || info.velocity.x > 350) {
+      goToNext(); // even dragging backwards still moves forward
     }
+  };
+
+  const currentWork = works[currentIndex];
+
+  // Always enter from right, exit to left
+  const slideVariants = {
+    enter: {
+      x: 80,
+      opacity: 0,
+      scale: 0.96,
+    },
+    center: {
+      x: 0,
+      opacity: 1,
+      scale: 1,
+      transition: {
+        x: { type: 'spring' as const, stiffness: 320, damping: 30 },
+        opacity: { duration: 0.28, ease: 'easeOut' },
+        scale: { duration: 0.28, ease: 'easeOut' },
+      },
+    },
+    exit: {
+      x: -80,
+      opacity: 0,
+      scale: 0.96,
+      transition: {
+        x: { type: 'spring' as const, stiffness: 320, damping: 30 },
+        opacity: { duration: 0.2, ease: 'easeIn' },
+        scale: { duration: 0.2, ease: 'easeIn' },
+      },
+    },
   };
 
   return (
     <div className="carousel-wrapper">
-      {/* Sliding Viewport */}
+      {/* Overflow clip container */}
       <div
-        className="carousel-viewport"
+        className="carousel-stage"
         onMouseDown={() => setIsPaused(true)}
         onMouseUp={() => setIsPaused(false)}
         onTouchStart={() => setIsPaused(true)}
         onTouchEnd={() => setIsPaused(false)}
         onTouchCancel={() => setIsPaused(false)}
       >
-        <motion.div
-          className="carousel-track"
-          animate={{ x: `-${currentIndex * 100}%` }}
-          transition={{
-            type: 'spring',
-            stiffness: 280,
-            damping: 32,
-            mass: 0.8,
-          }}
-          drag="x"
-          dragConstraints={{ left: 0, right: 0 }}
-          dragElastic={0.2}
-          onDragStart={() => {
-            setIsDragging(true);
-            setIsPaused(true);
-          }}
-          onDragEnd={handleDragEnd}
-        >
-          {works.map((work, index) => (
-            <div key={work.id} className="carousel-slide">
-              <div className="carousel-card card-royal">
-                {/* Image Preview Container */}
-                <div className="carousel-img-wrap">
-                  <img
-                    src={work.image}
-                    alt={work.title}
-                    className="carousel-main-img"
-                    draggable={false}
-                    loading={index === 0 ? 'eager' : 'lazy'}
-                  />
-                </div>
-
-                {/* Content Details */}
-                <div className="carousel-details">
-                  <div className="details-header">
-                    <span className="slide-counter">
-                      0{index + 1} / 0{works.length}
-                    </span>
-                  </div>
-                  <h3 className="carousel-work-title">{work.title}</h3>
-                  <p className="carousel-work-desc">{work.description}</p>
-                </div>
-              </div>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={slideKey}
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.15}
+            onDragStart={() => setIsPaused(true)}
+            onDragEnd={handleDragEnd}
+            className="carousel-card card-royal"
+            style={{ cursor: 'grab' }}
+          >
+            {/* Image */}
+            <div className="carousel-img-wrap">
+              <img
+                src={currentWork.image}
+                alt={currentWork.title}
+                className="carousel-main-img"
+                draggable={false}
+              />
             </div>
-          ))}
-        </motion.div>
+
+            {/* Details */}
+            <div className="carousel-details">
+              <div className="details-header">
+                <span className="slide-counter">
+                  0{currentIndex + 1} / 0{works.length}
+                </span>
+              </div>
+              <h3 className="carousel-work-title">{currentWork.title}</h3>
+              <p className="carousel-work-desc">{currentWork.description}</p>
+            </div>
+          </motion.div>
+        </AnimatePresence>
       </div>
 
       {/* Bottom Navigation: < (dots) > */}
@@ -143,7 +163,7 @@ export default function WorkCarousel() {
         <button
           type="button"
           className="carousel-btn prev-btn"
-          onClick={prevSlide}
+          onClick={goToPrev}
           aria-label="Previous Artwork"
         >
           <CaretLeft size={18} weight="bold" />
@@ -155,7 +175,10 @@ export default function WorkCarousel() {
               key={work.id}
               type="button"
               className={`pagination-dot ${index === currentIndex ? 'active' : ''}`}
-              onClick={() => setCurrentIndex(index)}
+              onClick={() => {
+                setCurrentIndex(index);
+                setSlideKey((k) => k + 1);
+              }}
               aria-label={`Go to artwork ${index + 1}`}
             />
           ))}
@@ -164,7 +187,7 @@ export default function WorkCarousel() {
         <button
           type="button"
           className="carousel-btn next-btn"
-          onClick={nextSlide}
+          onClick={goToNext}
           aria-label="Next Artwork"
         >
           <CaretRight size={18} weight="bold" />
@@ -180,36 +203,23 @@ export default function WorkCarousel() {
           position: relative;
         }
 
-        /* Viewport & Track */
-        .carousel-viewport {
+        /* Clip overflow so slide transitions stay inside */
+        .carousel-stage {
           position: relative;
           width: 100%;
+          min-height: 420px;
           overflow: hidden;
           border-radius: 1.4rem;
-          cursor: grab;
           touch-action: pan-y;
-          user-select: none;
         }
 
-        .carousel-viewport:active {
-          cursor: grabbing;
+        @media (min-width: 768px) {
+          .carousel-stage {
+            min-height: 520px;
+          }
         }
 
-        .carousel-track {
-          display: flex;
-          width: 100%;
-          will-change: transform;
-        }
-
-        .carousel-slide {
-          flex: 0 0 100%;
-          width: 100%;
-          min-width: 100%;
-          max-width: 100%;
-          box-sizing: border-box;
-        }
-
-        /* Card Layout */
+        /* Card */
         .carousel-card {
           width: 100%;
           background: #FFFFFF;
@@ -222,6 +232,7 @@ export default function WorkCarousel() {
           padding: 1.25rem;
           box-sizing: border-box;
           gap: 1.25rem;
+          user-select: none;
         }
 
         @media (min-width: 820px) {
@@ -311,7 +322,7 @@ export default function WorkCarousel() {
           }
         }
 
-        /* Bottom Navigation: < (dots) > */
+        /* Bottom Nav */
         .carousel-bottom-nav {
           display: flex;
           align-items: center;

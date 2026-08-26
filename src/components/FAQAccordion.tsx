@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 import { CaretDown, Sparkle } from '@phosphor-icons/react';
 
 interface FAQItem {
@@ -69,32 +69,22 @@ export default function FAQAccordion() {
               <motion.div
                 className="faq-icon-wrap"
                 animate={{ rotate: isOpen ? 180 : 0 }}
-                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
               >
                 <CaretDown size={18} weight="bold" />
               </motion.div>
             </button>
 
-            <AnimatePresence initial={false}>
-              {isOpen && (
-                <motion.div
-                  key="content"
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{
-                    height: { duration: 0.32, ease: [0.25, 1, 0.5, 1] },
-                    opacity: { duration: 0.22, ease: 'easeOut' },
-                  }}
-                  className="faq-answer-wrapper"
-                >
-                  <div className="faq-answer-inner">
-                    <div className="faq-answer-divider" />
-                    <p className="faq-answer-text">{faq.answer}</p>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            {/*
+              CSS grid-template-rows trick: animating from 0fr -> 1fr
+              is fully GPU-accelerated and never causes layout jitter.
+            */}
+            <div className={`faq-answer-grid ${isOpen ? 'faq-answer-open' : ''}`}>
+              <div className="faq-answer-inner">
+                <div className="faq-answer-divider" />
+                <p className="faq-answer-text">{faq.answer}</p>
+              </div>
+            </div>
           </div>
         );
       })}
@@ -117,8 +107,9 @@ export default function FAQAccordion() {
           border-radius: 1.25rem;
           border: 1px solid var(--color-border-subtle);
           box-shadow: 0 4px 20px rgba(30, 42, 69, 0.04);
-          transition: border-color 0.25s ease, box-shadow 0.25s ease;
           box-sizing: border-box;
+          /* Only transition visual properties, NOT layout ones */
+          transition: border-color 0.25s ease, box-shadow 0.25s ease;
         }
 
         .faq-item:hover {
@@ -205,14 +196,26 @@ export default function FAQAccordion() {
           border-color: var(--color-border-gold);
         }
 
-        .faq-answer-wrapper {
-          width: 100%;
-          overflow: hidden;
-          will-change: height, opacity;
-          box-sizing: border-box;
+        /*
+          The key to jitter-free accordion:
+          Animate grid-template-rows from 0fr -> 1fr.
+          This is compositor-friendly and never triggers layout shifts.
+        */
+        .faq-answer-grid {
+          display: grid;
+          grid-template-rows: 0fr;
+          transition: grid-template-rows 0.32s cubic-bezier(0.25, 1, 0.5, 1),
+                      opacity 0.25s ease;
+          opacity: 0;
+        }
+
+        .faq-answer-open {
+          grid-template-rows: 1fr;
+          opacity: 1;
         }
 
         .faq-answer-inner {
+          overflow: hidden;
           padding: 0 1.35rem 1.35rem 1.35rem;
           box-sizing: border-box;
         }
