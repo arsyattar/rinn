@@ -33,8 +33,17 @@ export default function ScrollRevealSection({
     [20, 0, 0, -10]
   );
 
-  // Break title into words for character/word staggered reveal
-  const words = title.split(' ');
+  // Break title into individual characters (with word/space tracking)
+  const chars: { char: string; isSpace: boolean; charIndex: number }[] = [];
+  let charIdx = 0;
+  title.split(' ').forEach((word, wIdx) => {
+    if (wIdx > 0) {
+      chars.push({ char: ' ', isSpace: true, charIndex: charIdx++ });
+    }
+    Array.from(word).forEach((c) => {
+      chars.push({ char: c, isSpace: false, charIndex: charIdx++ });
+    });
+  });
 
   return (
     <motion.section
@@ -73,37 +82,40 @@ export default function ScrollRevealSection({
               },
             }}
           >
-            {words.map((word, wIdx) => (
-              <span key={wIdx} className="word-wrapper">
-                {Array.from(word).map((char, cIdx) => (
-                  <motion.span
-                    key={cIdx}
-                    className="char-reveal"
-                    variants={{
-                      hidden: {
-                        opacity: 0,
-                        y: 20,
-                        rotateX: -60,
-                        filter: 'blur(3px)',
+            {chars.map(({ char, isSpace, charIndex }) =>
+              isSpace ? (
+                <span key={charIndex} className="word-space">&nbsp;</span>
+              ) : (
+                <motion.span
+                  key={charIndex}
+                  className="char-reveal section-wave-char"
+                  style={{
+                    animationDelay: `${(charIndex * 0.08).toFixed(2)}s`,
+                  }}
+                  variants={{
+                    hidden: {
+                      opacity: 0,
+                      y: 20,
+                      rotateX: -60,
+                      filter: 'blur(3px)',
+                    },
+                    visible: {
+                      opacity: 1,
+                      y: 0,
+                      rotateX: 0,
+                      filter: 'blur(0px)',
+                      transition: {
+                        type: 'spring',
+                        damping: 14,
+                        stiffness: 110,
                       },
-                      visible: {
-                        opacity: 1,
-                        y: 0,
-                        rotateX: 0,
-                        filter: 'blur(0px)',
-                        transition: {
-                          type: 'spring',
-                          damping: 14,
-                          stiffness: 110,
-                        },
-                      },
-                    }}
-                  >
-                    {char}
-                  </motion.span>
-                ))}
-              </span>
-            ))}
+                    },
+                  }}
+                >
+                  {char}
+                </motion.span>
+              )
+            )}
           </motion.h2>
 
           {subtitle && (
@@ -187,9 +199,9 @@ export default function ScrollRevealSection({
           perspective: 600px;
         }
 
-        .word-wrapper {
+        .word-space {
           display: inline-block;
-          margin: 0 0.18em;
+          width: 0.35em;
         }
 
         .char-reveal {
@@ -200,6 +212,34 @@ export default function ScrollRevealSection({
 
         .char-reveal:hover {
           color: var(--color-primary);
+        }
+
+        /* Periodic wave animation — same timing as hero section name (5s) */
+        @keyframes sectionPeriodicWave {
+          0%, 25%, 100% {
+            transform: translateY(0) scale(1);
+            filter: drop-shadow(0 0 0 rgba(201, 166, 107, 0));
+          }
+          6% {
+            transform: translateY(-9px) scale(1.09);
+            filter: drop-shadow(0 4px 10px rgba(201, 166, 107, 0.65));
+          }
+          12% {
+            transform: translateY(3px) scale(0.97);
+            filter: drop-shadow(0 2px 5px rgba(201, 166, 107, 0.35));
+          }
+          18% {
+            transform: translateY(-1.5px) scale(1.02);
+          }
+          22% {
+            transform: translateY(0) scale(1);
+            filter: drop-shadow(0 0 0 rgba(201, 166, 107, 0));
+          }
+        }
+
+        .section-wave-char {
+          animation: sectionPeriodicWave 5s ease-in-out infinite;
+          will-change: transform, filter;
         }
 
         .section-reveal-subtitle {

@@ -1,5 +1,38 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+
+/**
+ * Renders text letter-by-letter with the periodic wave animation.
+ * Each word is wrapped in white-space:nowrap so breaks only happen between words,
+ * never mid-word (e.g. "ED)" alone on a line).
+ */
+function WaveText({ text, className = '' }: { text: string; className?: string }) {
+  let globalCharIdx = 0;
+  const words = text.split(' ');
+  return (
+    <span className={className} style={{ display: 'inline' }}>
+      {words.map((word, wIdx) => (
+        <React.Fragment key={wIdx}>
+          {wIdx > 0 && <span style={{ display: 'inline-block', width: '0.3em' }}>&nbsp;</span>}
+          <span style={{ display: 'inline-block', whiteSpace: 'nowrap' }}>
+            {Array.from(word).map((char, cIdx) => {
+              const idx = globalCharIdx++;
+              return (
+                <span
+                  key={cIdx}
+                  className="card-wave-char"
+                  style={{ animationDelay: `${(idx * 0.08).toFixed(2)}s` }}
+                >
+                  {char}
+                </span>
+              );
+            })}
+          </span>
+        </React.Fragment>
+      ))}
+    </span>
+  );
+}
 import {
   WhatsappLogo,
   Sparkle,
@@ -343,7 +376,7 @@ export default function CommissionPriceList() {
 
               {/* Card Header with unified heights */}
               <div className="pricing-header">
-                <h3 className="pricing-title">{plan.name}</h3>
+                <h3 className="pricing-title"><WaveText text={plan.name} /></h3>
                 <p className="pricing-subtitle">{plan.subtitle}</p>
               </div>
 
@@ -437,7 +470,7 @@ export default function CommissionPriceList() {
       >
         <div className="terms-header">
           <div className="terms-gem" />
-          <h4 className="terms-title">Commission Terms & Guidelines</h4>
+          <h4 className="terms-title"><WaveText text="Commission Terms & Guidelines" /></h4>
           <div className="terms-gem" />
         </div>
 
@@ -447,7 +480,7 @@ export default function CommissionPriceList() {
               <Image size={20} weight="bold" />
             </div>
             <div className="terms-info">
-              <span className="terms-label">Additional Detail & Background</span>
+              <span className="terms-label">Additional Detail &amp; Background</span>
               <p className="terms-desc">
                 +Rp 30.000 – Rp 200.000 depending on character complexity & detailed background scenery.
               </p>
@@ -459,7 +492,7 @@ export default function CommissionPriceList() {
               <Users size={20} weight="bold" />
             </div>
             <div className="terms-info">
-              <span className="terms-label">Commercial & Couple Rate</span>
+              <span className="terms-label">Commercial &amp; Couple Rate</span>
               <p className="terms-desc">
                 Commercial use (YouTube thumbnails, VTuber, merch, business) is <strong>+100% (2x base price)</strong>. Couple artworks are 2x base price.
               </p>
@@ -471,7 +504,7 @@ export default function CommissionPriceList() {
               <CreditCard size={20} weight="bold" />
             </div>
             <div className="terms-info">
-              <span className="terms-label">Payment Milestones & Methods</span>
+              <span className="terms-label">Payment Milestones &amp; Methods</span>
               <p className="terms-desc">
                 Payment after rough sketch approval (<strong>Full</strong> or <strong>DP</strong> with balance upon completion). <strong>PayPal</strong> (International) & <strong>SeaBank / All E-Wallets</strong> (Local).
               </p>
@@ -496,7 +529,7 @@ export default function CommissionPriceList() {
               <CheckCircle size={20} weight="bold" />
             </div>
             <div className="terms-info">
-              <span className="terms-label">Do & Don't Guidelines</span>
+              <span className="terms-label">Do &amp; Don&apos;t Guidelines</span>
               <div className="terms-dodont-group">
                 <p className="terms-desc">
                   <strong>DO:</strong> Male/Female, Fanart/OCs, Couple/Yumeship.
@@ -627,6 +660,51 @@ export default function CommissionPriceList() {
           display: flex;
           flex-direction: column;
           gap: 0.2rem;
+        }
+
+        /* Each character just stays inline-block so word-wrapping works correctly */
+        .card-wave-char {
+          display: inline-block;
+        }
+
+        /* Subtle golden sparkle at the end of every pricing card title */
+        @keyframes titleSparkle {
+          0%, 68%, 100% {
+            opacity: 0.25;
+            filter: drop-shadow(0 0 0px rgba(201, 166, 107, 0));
+            transform: scale(0.85);
+          }
+          72% {
+            opacity: 1;
+            filter: drop-shadow(0 0 6px rgba(201, 166, 107, 0.85));
+            transform: scale(1.25);
+          }
+          76% {
+            opacity: 0.3;
+            filter: drop-shadow(0 0 1px rgba(201, 166, 107, 0.2));
+            transform: scale(0.9);
+          }
+          80% {
+            opacity: 1;
+            filter: drop-shadow(0 0 6px rgba(201, 166, 107, 0.85));
+            transform: scale(1.25);
+          }
+          85% {
+            opacity: 0.25;
+            filter: drop-shadow(0 0 0px rgba(201, 166, 107, 0));
+            transform: scale(0.85);
+          }
+        }
+
+        .pricing-title::after {
+          content: '✦';
+          display: inline-block;
+          margin-left: 0.3em;
+          font-size: 0.6em;
+          vertical-align: middle;
+          color: var(--color-primary);
+          animation: titleSparkle 6s ease-in-out infinite;
+          will-change: opacity, filter, transform;
         }
 
         .pricing-title {
