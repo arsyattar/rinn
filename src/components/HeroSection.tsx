@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Sparkle, Eye, TiktokLogo } from '@phosphor-icons/react';
+import { Sparkle, Eye, WhatsappLogo } from '@phosphor-icons/react';
 import NametageCard from './InteractiveNametag';
 
 export default function HeroSection() {
@@ -123,12 +123,10 @@ export default function HeroSection() {
                 <Eye size={16} weight="bold" /><span>View Gallery</span>
               </a>
               <a
-                href="https://www.tiktok.com/@cat.bedo29"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#contact"
                 className="btn-commission-gold hero-btn"
               >
-                <TiktokLogo size={16} weight="bold" /><span>Order Commission</span>
+                <Sparkle size={16} weight="bold" /><span>Order Commission</span>
               </a>
             </motion.div>
           </motion.div>

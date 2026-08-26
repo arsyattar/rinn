@@ -11,27 +11,27 @@ interface FAQItem {
 const faqs: FAQItem[] = [
   {
     id: 1,
-    question: 'How long does an illustration usually take?',
+    question: 'How long does the illustration process usually take?',
     answer:
-      'Turnaround time generally ranges from 2 to 4 weeks depending on the complexity of the artwork, background details, and current project queue.',
+      'Turnaround time is typically 1 to 2 weeks, depending on the complexity of the character details, pose, and background scenery.',
   },
   {
     id: 2,
-    question: 'What payment methods do you accept?',
+    question: 'What payment methods and milestones are accepted?',
     answer:
-      'Payments are securely handled via PayPal invoice or Stripe (international credit/debit cards). A deposit or upfront agreement is confirmed before sketching begins.',
+      'Payment is made after the rough sketch is approved. You can choose to pay in Full or provide a Down Payment (DP), with the remaining balance settled once the artwork is completed. We accept PayPal for international clients, and SeaBank or all major E-Wallets (DANA, GoPay, OVO, ShopeePay) for local Indonesian clients.',
   },
   {
     id: 3,
-    question: 'Do you allow commercial usage?',
+    question: 'How does the revision policy work?',
     answer:
-      'Yes! Commercial rights for VTuber assets, merchandise, light novel covers, and promotional media can be arranged with tailored licensing terms.',
+      'Each commission includes up to 3 complimentary revisions during the sketch stage. Additional revisions beyond 3x start from +Rp 10.000 per revision. Once the artwork enters the coloring stage, only color adjustments are permitted.',
   },
   {
     id: 4,
-    question: 'How do revisions and feedback work?',
+    question: 'How is commercial usage and licensing handled?',
     answer:
-      'You receive complimentary revision checkpoints during the composition sketch phase and base color stage to ensure the final piece aligns with your vision.',
+      'Commercial usage (such as YouTube thumbnails, VTuber assets, merchandise, cover art, or promotional business media) incurs an additional +100% of the base price (2x standard rate).',
   },
 ];
 

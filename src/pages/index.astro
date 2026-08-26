@@ -5,6 +5,7 @@ import HeroSection from '../components/HeroSection';
 import ScrollRevealSection from '../components/ScrollRevealSection';
 import WorkCarousel from '../components/WorkCarousel';
 import FAQAccordion from '../components/FAQAccordion';
+import CommissionPriceList from '../components/CommissionPriceList';
 import Footer from '../components/Footer.astro';
 ---
 
@@ -15,18 +16,7 @@ import Footer from '../components/Footer.astro';
 		{/* Hero Section */}
 		<HeroSection client:load />
 
-		{/* 1. Gallery Section — Horizontal Loop Carousel */}
-		<ScrollRevealSection
-			client:visible
-			id="gallery"
-			badge="Featured Gallery"
-			title="Some of My Works"
-			subtitle="Swipe through bespoke character concepts, model sheets, and fantasy artwork."
-		>
-			<WorkCarousel client:visible />
-		</ScrollRevealSection>
-
-		{/* 2. About / Character Profile Section */}
+		{/* 1. About / Character Profile Section */}
 		<ScrollRevealSection
 			client:visible
 			id="about"
@@ -37,63 +27,59 @@ import Footer from '../components/Footer.astro';
 			<div class="about-card card-royal genshin-oc-card">
 				<div class="genshin-decor-bg"></div>
 				<div class="genshin-oc-grid">
-					{/* Left: Genshin Character Card Frame */}
+					{/* Left: Character Portrait (Frameless & Clean) */}
 					<div class="genshin-card-col">
 						<div class="genshin-card-stack">
-							<div class="genshin-shadow-card"></div>
-							<div class="genshin-main-card">
-								<div class="genshin-corner-ornament top-left">✦</div>
-								<div class="genshin-corner-ornament top-right">✦</div>
-								<div class="genshin-corner-ornament bottom-left">✦</div>
-								<div class="genshin-corner-ornament bottom-right">✦</div>
-								<div class="genshin-avatar-inner">
-									<img src="/photo/profil_amai.png" alt="Amai Vaelithys Genshin OC" class="genshin-avatar-img" />
-								</div>
+							<div class="genshin-portrait-wrap">
+								<img
+									src="/photo/amai_hd.png"
+									alt="Amai Vaelithys — Genshin OC"
+									class="genshin-oc-portrait"
+									loading="eager"
+								/>
 							</div>
 						</div>
-
-						{/* 5 Stars Rating & Role */}
-						<div class="genshin-stars-row">
-							<div class="stars-gold">
-								<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-							</div>
-							<div class="role-badge">
-								<span class="element-icon">❄️</span>
-								<span class="role-text">Cryo Healer</span>
-							</div>
+						<div class="genshin-rarity-stars">
+							<span class="star-icon">⭐</span>
+							<span class="star-icon">⭐</span>
+							<span class="star-icon">⭐</span>
+							<span class="star-icon">⭐</span>
+							<span class="star-icon">⭐</span>
 						</div>
 					</div>
 
-					{/* Right: Character Info & Lore */}
+					{/* Right: Character Info Details */}
 					<div class="genshin-info-col">
-						<div class="oc-specs-list">
+						<div class="oc-header-group">
+							<h3 class="oc-title-name">Amai Vaelithys</h3>
+							<p class="oc-subtitle-title">Mondstadt Alchemist & Wandering Celestial Scholar</p>
+						</div>
+
+						<div class="oc-specs-table">
 							<div class="oc-spec-row">
-								<span class="oc-spec-label">Name</span>
+								<span class="oc-spec-key">Name</span>
 								<span class="oc-spec-colon">:</span>
-								<span class="oc-spec-value">
-									<strong class="oc-main-name">Amai Vaelithys</strong>
-									<span class="oc-alias">Nereida Astra</span>
-								</span>
+								<span class="oc-spec-val">Amai Vaelithys</span>
 							</div>
 							<div class="oc-spec-row">
-								<span class="oc-spec-label">Age</span>
+								<span class="oc-spec-key">Age</span>
 								<span class="oc-spec-colon">:</span>
-								<span class="oc-spec-value">Physically 24 (2000+)</span>
+								<span class="oc-spec-val">Unknown</span>
 							</div>
 							<div class="oc-spec-row">
-								<span class="oc-spec-label">Birthday</span>
+								<span class="oc-spec-key">Birthday</span>
 								<span class="oc-spec-colon">:</span>
-								<span class="oc-spec-value">29th September</span>
+								<span class="oc-spec-val">May 29th</span>
 							</div>
 							<div class="oc-spec-row">
-								<span class="oc-spec-label">Height</span>
+								<span class="oc-spec-key">Height</span>
 								<span class="oc-spec-colon">:</span>
-								<span class="oc-spec-value">165cm</span>
+								<span class="oc-spec-val">175 cm</span>
 							</div>
 							<div class="oc-spec-row">
-								<span class="oc-spec-label">Affiliation</span>
+								<span class="oc-spec-key">Affiliation</span>
 								<span class="oc-spec-colon">:</span>
-								<span class="oc-spec-value highlight-affiliation">Knight of Favonious</span>
+								<span class="oc-spec-val">Knights of Favonius (Alchemical Division)</span>
 							</div>
 						</div>
 
@@ -113,7 +99,29 @@ import Footer from '../components/Footer.astro';
 			</div>
 		</ScrollRevealSection>
 
-		{/* 3. FAQ Section */}
+		{/* 2. Gallery Section — Horizontal Loop Carousel */}
+		<ScrollRevealSection
+			client:visible
+			id="gallery"
+			badge="Featured Gallery"
+			title="Some of My Works"
+			subtitle="Swipe through bespoke character concepts, model sheets, and fantasy artwork."
+		>
+			<WorkCarousel client:visible />
+		</ScrollRevealSection>
+
+		{/* 3. Pricing / Commission Packages Section */}
+		<ScrollRevealSection
+			client:visible
+			id="contact"
+			badge="Commission Price List"
+			title="Let’s Create Something Celestial"
+			subtitle="Select your preferred commission package below to start your order with direct pre-filled details via WhatsApp."
+		>
+			<CommissionPriceList client:visible />
+		</ScrollRevealSection>
+
+		{/* 4. FAQ Section */}
 		<ScrollRevealSection
 			client:visible
 			id="faq"
@@ -122,29 +130,6 @@ import Footer from '../components/Footer.astro';
 			subtitle="Everything you need to know about the illustration workflow, turnaround times, and file delivery."
 		>
 			<FAQAccordion client:visible />
-		</ScrollRevealSection>
-
-		{/* 5. Contact Section */}
-		<ScrollRevealSection
-			client:visible
-			id="contact"
-			badge="Initiate Order"
-			title="Let’s Create Something Celestial"
-			subtitle="Have a character in mind or an upcoming project? Reach out through the channels below to book your commission slot."
-		>
-			<div class="contact-box card-royal">
-				<div class="contact-single-card">
-					<div class="contact-item">
-						<span class="contact-label">TikTok Direct Message</span>
-						<a href="https://www.tiktok.com/@cat.bedo29" target="_blank" rel="noopener noreferrer" class="contact-link">@cat.bedo29</a>
-					</div>
-				</div>
-				<div class="contact-action">
-					<a href="https://www.tiktok.com/@cat.bedo29" target="_blank" rel="noopener noreferrer" class="btn-primary">
-						<span>Order Commission via TikTok</span>
-					</a>
-				</div>
-			</div>
 		</ScrollRevealSection>
 	</main>
 
@@ -216,96 +201,46 @@ import Footer from '../components/Footer.astro';
 		}
 	}
 
-	/* Tilted shadow card behind main frame */
-	.genshin-shadow-card {
-		position: absolute;
-		inset: 0;
-		background: #1A2338;
-		border-radius: 1.4rem;
-		transform: rotate(-4deg) translateY(4px) scale(0.98);
-		z-index: 0;
-		box-shadow: 0 8px 20px rgba(30, 42, 69, 0.25);
-		border: 1.5px solid rgba(201, 166, 107, 0.5);
-	}
-
-	/* Main framed card */
-	.genshin-main-card {
-		position: relative;
-		z-index: 1;
+	/* Frameless Character Portrait */
+	.genshin-portrait-wrap {
 		width: 100%;
-		aspect-ratio: 1 / 1.22;
-		background: linear-gradient(180deg, #E6F4F7 0%, #D4EDF2 100%);
-		border: 3px solid #8B7355;
-		outline: 2px solid #C9A66B;
-		border-radius: 1.4rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 1.25rem;
 		overflow: hidden;
-		box-shadow: 0 10px 24px rgba(30, 42, 69, 0.15);
-		display: flex;
-		align-items: flex-end;
-		justify-content: center;
+		background: transparent;
 	}
 
-	.genshin-corner-ornament {
-		position: absolute;
-		font-size: 0.65rem;
-		color: #C9A66B;
-		z-index: 3;
-		pointer-events: none;
-		line-height: 1;
-	}
-
-	.genshin-corner-ornament.top-left { top: 6px; left: 8px; }
-	.genshin-corner-ornament.top-right { top: 6px; right: 8px; }
-	.genshin-corner-ornament.bottom-left { bottom: 6px; left: 8px; }
-	.genshin-corner-ornament.bottom-right { bottom: 6px; right: 8px; }
-
-	.genshin-avatar-inner {
+	.genshin-oc-portrait {
 		width: 100%;
-		height: 100%;
-		display: flex;
-		align-items: flex-start;
-		justify-content: center;
+		height: auto;
+		max-height: 320px;
+		object-fit: contain;
+		display: block;
+		filter: drop-shadow(0 8px 24px rgba(30, 42, 69, 0.12));
+		transition: transform 0.3s ease;
 	}
 
-	.genshin-avatar-img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		object-position: center top;
+	.genshin-oc-portrait:hover {
+		transform: scale(1.02);
 	}
 
 	/* 5 Stars Rating */
+	.genshin-rarity-stars,
 	.genshin-stars-row {
 		display: flex;
-		flex-direction: column;
+		justify-content: center;
 		align-items: center;
 		gap: 0.25rem;
-		margin-bottom: 0.85rem;
+		margin-top: 0.75rem;
+		font-size: 1.15rem;
 	}
 
+	.star-icon,
 	.stars-gold {
-		display: flex;
-		gap: 0.15rem;
-		color: #F5B041;
-		font-size: 1.45rem;
-		letter-spacing: 0.05em;
-		text-shadow: 0 0 10px rgba(245, 176, 65, 0.65);
-		line-height: 1;
-	}
-
-	.role-badge {
 		display: inline-flex;
-		align-items: center;
-		gap: 0.3rem;
-		font-size: 0.78rem;
-		font-weight: 700;
-		color: #4A7A8C;
-		letter-spacing: 0.04em;
-		text-transform: uppercase;
-	}
-
-	.element-icon {
-		font-size: 0.85rem;
+		line-height: 1;
 	}
 
 	/* Right Info Column */
@@ -316,6 +251,7 @@ import Footer from '../components/Footer.astro';
 		width: 100%;
 	}
 
+	.oc-specs-table,
 	.oc-specs-list {
 		display: grid;
 		grid-template-columns: auto auto 1fr;
@@ -325,6 +261,7 @@ import Footer from '../components/Footer.astro';
 	}
 
 	@media (min-width: 640px) {
+		.oc-specs-table,
 		.oc-specs-list {
 			gap: 0.8rem 0.75rem;
 		}
@@ -334,6 +271,7 @@ import Footer from '../components/Footer.astro';
 		display: contents;
 	}
 
+	.oc-spec-key,
 	.oc-spec-label {
 		font-family: var(--font-serif);
 		font-weight: 700;
@@ -353,12 +291,14 @@ import Footer from '../components/Footer.astro';
 	}
 
 	@media (min-width: 768px) {
+		.oc-spec-key,
 		.oc-spec-label,
 		.oc-spec-colon {
 			font-size: 1.15rem;
 		}
 	}
 
+	.oc-spec-val,
 	.oc-spec-value {
 		font-weight: 600;
 		color: #2C4260;
@@ -371,6 +311,7 @@ import Footer from '../components/Footer.astro';
 	}
 
 	@media (min-width: 768px) {
+		.oc-spec-val,
 		.oc-spec-value {
 			font-size: 1.15rem;
 		}

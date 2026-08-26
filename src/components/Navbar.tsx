@@ -7,10 +7,10 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { label: 'Gallery', href: '#gallery' },
   { label: 'About', href: '#about' },
+  { label: 'Gallery', href: '#gallery' },
+  { label: 'Pricing', href: '#contact' },
   { label: 'FAQ', href: '#faq' },
-  { label: 'Contact', href: '#contact' },
 ];
 
 export default function Navbar() {
