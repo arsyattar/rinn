@@ -1,72 +1,92 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { CaretLeft, CaretRight } from '@phosphor-icons/react';
+import { CaretLeft, CaretRight, Sparkle } from '@phosphor-icons/react';
 
-interface WorkItem {
-  id: number;
-  image: string;
+interface CategoryItem {
+  id: string;
   title: string;
-  description: string;
+  price: string;
+  priceNote?: string;
+  images: string[];
 }
 
-// direction: 1 = entering from right (go forward), -1 = entering from left (go back)
-
-const works: WorkItem[] = [
+const categoriesData: CategoryItem[] = [
   {
-    id: 1,
-    image: '/photo/work1.png',
-    title: 'Alchemical Adventurer — Character Commission',
-    description:
-      'Bespoke fantasy character illustration featuring stylized adventurer attire, delicate golden hair rendering, and dynamic costume draping.',
+    id: 'bust-up',
+    title: 'Bust Up',
+    price: 'Rp 80.000',
+    images: ['/photo/amai_hd.png', '/photo/work1.png'],
   },
   {
-    id: 2,
-    image: '/photo/work2.png',
-    title: 'Celestial Elf — Model Reference Sheet',
-    description:
-      'Comprehensive character turnaround and specification sheet showcasing front and back views, accessory close-ups, and harmonic color palette.',
+    id: 'genshin-icon',
+    title: 'Genshin Avatar Icon',
+    price: 'Rp 100.000',
+    images: ['/photo/amai_hd.png', '/photo/profil_amai.png'],
+  },
+  {
+    id: 'half-body',
+    title: 'Half Body',
+    price: 'Rp 150.000',
+    images: ['/photo/work1.png', '/photo/amai_hd.png'],
+  },
+  {
+    id: 'full-body',
+    title: 'Full Body',
+    price: 'Rp 200.000',
+    images: ['/photo/work1.png', '/photo/profil_amai.png'],
+  },
+  {
+    id: 'charasheet-simple',
+    title: 'Character Sheet (Simple)',
+    price: 'Rp 250.000',
+    priceNote: 'Start from',
+    images: ['/photo/work2.png', '/photo/work1.png'],
+  },
+  {
+    id: 'genshin-drip',
+    title: 'Genshin Drip Art',
+    price: 'Rp 260.000',
+    images: ['/photo/profil_amai.png', '/photo/amai_hd.png'],
+  },
+  {
+    id: 'charasheet-overdetailed',
+    title: 'Character Sheet (Overdetailed)',
+    price: 'Rp 500.000',
+    priceNote: 'Start from',
+    images: ['/photo/work2.png', '/photo/profil_amai.png'],
   },
 ];
 
-let slideCounter = 0;
-
-export default function WorkCarousel() {
-  const [currentIndex, setCurrentIndex] = useState(0);
+// Subcomponent for individual category card with isolated image-only swiping
+function CategoryCard({ item }: { item: CategoryItem }) {
+  const [currentImgIndex, setCurrentImgIndex] = useState(0);
   const [slideKey, setSlideKey] = useState(0);
-  const [direction, setDirection] = useState(1); // 1 = from right, -1 = from left
+  const [direction, setDirection] = useState(1);
   const [isPaused, setIsPaused] = useState(false);
-  const [cardHeight, setCardHeight] = useState<number | string>('auto');
-  const cardRef = useRef<HTMLDivElement>(null);
+  const slideCounterRef = useRef(0);
 
-  const goToNext = () => {
-    slideCounter += 1;
+  const nextImage = () => {
+    slideCounterRef.current += 1;
     setDirection(1);
-    setCurrentIndex((prev) => (prev + 1) % works.length);
-    setSlideKey(slideCounter);
+    setCurrentImgIndex((prev) => (prev + 1) % item.images.length);
+    setSlideKey(slideCounterRef.current);
   };
 
-  const goToPrev = () => {
-    slideCounter += 1;
+  const prevImage = () => {
+    slideCounterRef.current += 1;
     setDirection(-1);
-    setCurrentIndex((prev) => (prev - 1 + works.length) % works.length);
-    setSlideKey(slideCounter);
+    setCurrentImgIndex((prev) => (prev - 1 + item.images.length) % item.images.length);
+    setSlideKey(slideCounterRef.current);
   };
 
-  // Measure card height after mount so the stage has fixed height (no layout shift)
+  // Auto-swipe every 4s, only affects image transition, NO page scrolling
   useEffect(() => {
-    if (cardRef.current) {
-      setCardHeight(cardRef.current.offsetHeight);
-    }
-  }, []);
-
-  // Auto-swipe every 4 seconds
-  useEffect(() => {
-    if (isPaused) return;
-    const timer = setInterval(goToNext, 4000);
+    if (isPaused || item.images.length <= 1) return;
+    const timer = setInterval(nextImage, 4000);
     return () => clearInterval(timer);
-  }, [isPaused, currentIndex]);
+  }, [isPaused, currentImgIndex, item.images.length]);
 
-  // Window-level release
+  // Window-level safety release
   useEffect(() => {
     const handleRelease = () => setIsPaused(false);
     window.addEventListener('mouseup', handleRelease);
@@ -79,18 +99,24 @@ export default function WorkCarousel() {
     };
   }, []);
 
-  // Drag gesture — left drag = next, right drag = prev
   const handleDragEnd = (_: any, info: { offset: { x: number }; velocity: { x: number } }) => {
     setIsPaused(false);
-    const threshold = 50;
-    if (info.offset.x < -threshold || info.velocity.x < -350) {
-      goToNext(); // swipe left → next slide enters from right
-    } else if (info.offset.x > threshold || info.velocity.x > 350) {
-      goToPrev(); // swipe right → prev slide enters from left
+    const threshold = 40;
+    if (info.offset.x < -threshold || info.velocity.x < -300) {
+      nextImage();
+    } else if (info.offset.x > threshold || info.velocity.x > 300) {
+      prevImage();
     }
   };
 
-  const currentWork = works[currentIndex];
+  const scrollToPricing = () => {
+    const targetEl = document.getElementById(`pricing-${item.id}`);
+    if (targetEl) {
+      targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else {
+      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   const transition = {
     type: 'spring' as const,
@@ -99,20 +125,30 @@ export default function WorkCarousel() {
     mass: 0.9,
   };
 
-  // Enter/exit based on direction
   const enterX = direction === 1 ? '100%' : '-100%';
-  const exitX  = direction === 1 ? '-100%' : '100%';
+  const exitX = direction === 1 ? '-100%' : '100%';
 
   return (
-    <div className="carousel-wrapper">
-      {/*
-        Stage: position relative + overflow hidden + fixed height.
-        Cards inside are position absolute so they overlap during transition.
-        mode="sync" means exit and enter run at the same time — no blank frame.
-      */}
+    <div className="cat-card card-royal" id={`gallery-${item.id}`}>
+      {/* 1. Header (Static - Not Swiped) */}
+      <div className="cat-card-header">
+        <div className="cat-title-group">
+          <div className="cat-badge">
+            <Sparkle size={13} weight="fill" className="badge-sparkle" />
+            <span>Category</span>
+          </div>
+          <h3 className="cat-title-name">{item.title}</h3>
+        </div>
+
+        <div className="cat-price-pill">
+          {item.priceNote && <span className="cat-price-note">{item.priceNote}</span>}
+          <span className="cat-price-val">{item.price}</span>
+        </div>
+      </div>
+
+      {/* 2. Image Showcase Stage (ONLY the Image is Swiped) */}
       <div
-        className="carousel-stage"
-        style={{ height: cardHeight === 'auto' ? 'auto' : cardHeight }}
+        className="cat-image-stage"
         onMouseDown={() => setIsPaused(true)}
         onMouseUp={() => setIsPaused(false)}
         onTouchStart={() => setIsPaused(true)}
@@ -122,7 +158,6 @@ export default function WorkCarousel() {
         <AnimatePresence mode="sync">
           <motion.div
             key={slideKey}
-            ref={slideKey === 0 ? cardRef : undefined}
             initial={{ x: enterX }}
             animate={{ x: 0 }}
             exit={{ x: exitX }}
@@ -132,144 +167,245 @@ export default function WorkCarousel() {
             dragElastic={0.12}
             onDragStart={() => setIsPaused(true)}
             onDragEnd={handleDragEnd}
-            className="carousel-card card-royal"
+            className="cat-slide-image-wrap"
             style={{
               position: slideKey === 0 ? 'relative' : 'absolute',
               top: 0,
               left: 0,
               width: '100%',
+              height: '100%',
               cursor: 'grab',
               willChange: 'transform',
             }}
           >
-            {/* Image */}
-            <div className="carousel-img-wrap">
-              <img
-                src={currentWork.image}
-                alt={currentWork.title}
-                className="carousel-main-img"
-                draggable={false}
-              />
-            </div>
-
-            {/* Details */}
-            <div className="carousel-details">
-              <div className="details-header">
-                <span className="slide-counter">
-                  0{currentIndex + 1} / 0{works.length}
-                </span>
-              </div>
-              <h3 className="carousel-work-title">{currentWork.title}</h3>
-              <p className="carousel-work-desc">{currentWork.description}</p>
-            </div>
+            <img
+              src={item.images[currentImgIndex]}
+              alt={`${item.title} example ${currentImgIndex + 1}`}
+              className="cat-main-img"
+              draggable={false}
+            />
           </motion.div>
         </AnimatePresence>
-      </div>
 
-      {/* Bottom Navigation: < (dots) > */}
-      <div className="carousel-bottom-nav">
-        <button
-          type="button"
-          className="carousel-btn prev-btn"
-          onClick={goToPrev}
-          aria-label="Previous Artwork"
-        >
-          <CaretLeft size={18} weight="bold" />
-        </button>
-
-        <div className="carousel-pagination">
-          {works.map((work, index) => (
-            <button
-              key={work.id}
-              type="button"
-              className={`pagination-dot ${index === currentIndex ? 'active' : ''}`}
-              onClick={() => {
-                slideCounter += 1;
-                setCurrentIndex(index);
-                setSlideKey(slideCounter);
-              }}
-              aria-label={`Go to artwork ${index + 1}`}
-            />
-          ))}
+        {/* Counter Badge inside image stage */}
+        <div className="stage-counter-badge">
+          0{currentImgIndex + 1} / 0{item.images.length}
         </div>
+      </div>
 
+      {/* 3. Image Navigation Controls (< dots >) */}
+      {item.images.length > 1 && (
+        <div className="cat-image-nav">
+          <button
+            type="button"
+            className="cat-nav-btn prev-btn"
+            onClick={prevImage}
+            aria-label={`Previous ${item.title} image`}
+          >
+            <CaretLeft size={16} weight="bold" />
+          </button>
+
+          <div className="cat-dots">
+            {item.images.map((_, idx) => (
+              <button
+                key={idx}
+                type="button"
+                className={`cat-dot ${idx === currentImgIndex ? 'active' : ''}`}
+                onClick={() => {
+                  slideCounterRef.current += 1;
+                  setDirection(idx >= currentImgIndex ? 1 : -1);
+                  setCurrentImgIndex(idx);
+                  setSlideKey(slideCounterRef.current);
+                }}
+                aria-label={`Go to image ${idx + 1}`}
+              />
+            ))}
+          </div>
+
+          <button
+            type="button"
+            className="cat-nav-btn next-btn"
+            onClick={nextImage}
+            aria-label={`Next ${item.title} image`}
+          >
+            <CaretRight size={16} weight="bold" />
+          </button>
+        </div>
+      )}
+
+      {/* 4. Bottom Action Bar (Static - Not Swiped) */}
+      <div className="cat-card-action">
         <button
           type="button"
-          className="carousel-btn next-btn"
-          onClick={goToNext}
-          aria-label="Next Artwork"
+          onClick={scrollToPricing}
+          className="cat-view-details-btn btn-gold-primary"
+          aria-label={`View package details for ${item.title}`}
         >
-          <CaretRight size={18} weight="bold" />
+          <Sparkle size={16} weight="fill" />
+          <span>View Package Details</span>
         </button>
       </div>
+    </div>
+  );
+}
+
+export default function WorkCarousel() {
+  return (
+    <div className="works-categories-container">
+      {categoriesData.map((item) => (
+        <CategoryCard key={item.id} item={item} />
+      ))}
 
       <style>{`
-        .carousel-wrapper {
-          width: 100%;
+        .works-categories-container {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr);
+          gap: 2.5rem;
           max-width: 960px;
           margin: 0 auto;
-          box-sizing: border-box;
-          position: relative;
-        }
-
-        /* Stage clips the sliding cards */
-        .carousel-stage {
-          position: relative;
           width: 100%;
-          overflow: hidden;
-          border-radius: 1.4rem;
-          touch-action: pan-y;
-          /* Ensure background shows between slides - use same bg as cards */
-          background: #FFFFFF;
+          box-sizing: border-box;
         }
 
-        /* Card Layout */
-        .carousel-card {
+        /* Category Card Container */
+        .cat-card {
           background: #FFFFFF;
-          border-radius: 1.4rem;
+          border-radius: 1.6rem;
           border: 1.5px solid var(--color-border-gold);
-          box-shadow: 0 16px 40px rgba(30, 42, 69, 0.08), 0 4px 12px rgba(201, 166, 107, 0.12);
+          box-shadow: 0 16px 40px rgba(30, 42, 69, 0.08), 0 4px 14px rgba(201, 166, 107, 0.12);
           display: flex;
           flex-direction: column;
-          overflow: hidden;
-          padding: 1.25rem;
+          padding: 1.5rem;
           box-sizing: border-box;
           gap: 1.25rem;
-          user-select: none;
+          scroll-margin-top: 5rem;
+          transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
-        @media (min-width: 820px) {
-          .carousel-card {
-            flex-direction: row;
-            align-items: center;
-            padding: 2rem;
-            gap: 2.5rem;
+        @media (min-width: 768px) {
+          .cat-card {
+            padding: 2rem 2.25rem;
+            gap: 1.5rem;
           }
         }
 
-        /* Image Box */
-        .carousel-img-wrap {
+        .cat-card:hover {
+          border-color: var(--color-primary);
+          box-shadow: 0 20px 48px rgba(30, 42, 69, 0.12), 0 6px 18px rgba(201, 166, 107, 0.18);
+        }
+
+        /* 1. Header */
+        .cat-card-header {
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+          justify-content: space-between;
+          align-items: flex-start;
+          width: 100%;
+          border-bottom: 1px solid var(--color-border-subtle);
+          padding-bottom: 1rem;
+        }
+
+        @media (min-width: 640px) {
+          .cat-card-header {
+            flex-direction: row;
+            align-items: center;
+          }
+        }
+
+        .cat-title-group {
+          display: flex;
+          flex-direction: column;
+          gap: 0.35rem;
+        }
+
+        .cat-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35rem;
+          font-size: 0.7rem;
+          font-weight: 700;
+          letter-spacing: 0.05em;
+          text-transform: uppercase;
+          color: var(--color-text-gold);
+          background: var(--color-primary-subtle);
+          border: 1px solid var(--color-border-gold);
+          padding: 0.15rem 0.6rem;
+          border-radius: 9999px;
+          width: fit-content;
+        }
+
+        .badge-sparkle {
+          color: var(--color-primary);
+        }
+
+        .cat-title-name {
+          font-family: var(--font-serif);
+          font-size: 1.4rem;
+          font-weight: 700;
+          color: var(--color-secondary);
+          line-height: 1.25;
+          margin: 0;
+        }
+
+        @media (min-width: 768px) {
+          .cat-title-name {
+            font-size: 1.65rem;
+          }
+        }
+
+        .cat-price-pill {
+          display: inline-flex;
+          align-items: baseline;
+          gap: 0.35rem;
+          background: #FAF7F2;
+          border: 1.5px solid var(--color-border-gold);
+          padding: 0.45rem 1rem;
+          border-radius: 9999px;
+          box-shadow: var(--shadow-sm);
+        }
+
+        .cat-price-note {
+          font-size: 0.75rem;
+          font-weight: 600;
+          color: var(--color-text-muted);
+          text-transform: uppercase;
+        }
+
+        .cat-price-val {
+          font-family: var(--font-serif);
+          font-size: 1.25rem;
+          font-weight: 700;
+          color: var(--color-text-gold);
+          line-height: 1;
+        }
+
+        /* 2. Image Stage (Only Image Transitions) */
+        .cat-image-stage {
           position: relative;
           width: 100%;
-          height: 320px;
-          border-radius: 1.1rem;
+          height: 340px;
+          border-radius: 1.25rem;
           overflow: hidden;
           background: linear-gradient(135deg, #FAF7F0 0%, #EFF6F8 100%);
           border: 1px solid var(--color-border-subtle);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-shrink: 0;
+          touch-action: pan-y;
+          user-select: none;
         }
 
-        @media (min-width: 820px) {
-          .carousel-img-wrap {
-            width: 52%;
+        @media (min-width: 768px) {
+          .cat-image-stage {
             height: 440px;
           }
         }
 
-        .carousel-main-img {
+        .cat-slide-image-wrap {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .cat-main-img {
           width: 100%;
           height: 100%;
           object-fit: contain;
@@ -277,115 +413,118 @@ export default function WorkCarousel() {
           pointer-events: none;
           user-select: none;
           -webkit-user-drag: none;
+          transition: transform 0.4s ease;
         }
 
-        /* Details */
-        .carousel-details {
-          display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-          text-align: left;
-          flex: 1;
+        .cat-card:hover .cat-main-img {
+          transform: scale(1.02);
         }
 
-        .details-header {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          width: 100%;
-        }
-
-        .slide-counter {
+        .stage-counter-badge {
+          position: absolute;
+          bottom: 12px;
+          right: 14px;
+          background: rgba(30, 42, 69, 0.75);
+          backdrop-filter: blur(8px);
+          color: #FFFFFF;
           font-family: monospace;
-          font-size: 0.85rem;
+          font-size: 0.75rem;
           font-weight: 700;
-          color: var(--color-primary);
-          letter-spacing: 0.05em;
+          padding: 0.25rem 0.65rem;
+          border-radius: 9999px;
+          border: 1px solid rgba(201, 166, 107, 0.4);
+          z-index: 10;
+          pointer-events: none;
         }
 
-        .carousel-work-title {
-          font-family: var(--font-serif);
-          font-size: clamp(1.2rem, 3.2vw, 1.6rem);
-          font-weight: 700;
-          color: var(--color-secondary);
-          line-height: 1.3;
-          margin: 0;
-        }
-
-        .carousel-work-desc {
-          font-size: 0.92rem;
-          color: var(--color-text);
-          line-height: 1.75;
-          margin: 0;
-        }
-
-        @media (min-width: 768px) {
-          .carousel-work-desc {
-            font-size: 0.98rem;
-          }
-        }
-
-        /* Bottom Nav */
-        .carousel-bottom-nav {
+        /* 3. Image Navigation */
+        .cat-image-nav {
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 1.25rem;
-          margin-top: 1.5rem;
+          gap: 1rem;
           width: 100%;
         }
 
-        .carousel-btn {
-          width: 38px;
-          height: 38px;
+        .cat-nav-btn {
+          width: 34px;
+          height: 34px;
           border-radius: 50%;
           background: #FFFFFF;
-          border: 1.5px solid var(--color-border-gold);
+          border: 1px solid var(--color-border-gold);
           color: var(--color-secondary);
           display: flex;
           align-items: center;
           justify-content: center;
           cursor: pointer;
-          box-shadow: var(--shadow-sm);
-          transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+          transition: all 0.2s ease;
+          box-shadow: 0 2px 6px rgba(30, 42, 69, 0.06);
           flex-shrink: 0;
         }
 
-        .carousel-btn:hover {
+        .cat-nav-btn:hover {
           background: var(--color-secondary);
           color: #FFFFFF;
           border-color: var(--color-secondary);
-          transform: translateY(-2px);
-          box-shadow: 0 6px 16px rgba(30, 42, 69, 0.2);
+          transform: translateY(-1px);
         }
 
-        .carousel-btn:active {
-          transform: translateY(0);
-        }
-
-        /* Pagination Dots */
-        .carousel-pagination {
+        .cat-dots {
           display: flex;
           align-items: center;
-          justify-content: center;
-          gap: 0.6rem;
+          gap: 0.45rem;
         }
 
-        .pagination-dot {
-          width: 10px;
-          height: 10px;
+        .cat-dot {
+          width: 8px;
+          height: 8px;
           border-radius: 9999px;
           background: var(--color-border);
           border: none;
           cursor: pointer;
-          transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease;
+          transition: width 0.3s ease, background-color 0.3s ease;
           padding: 0;
         }
 
-        .pagination-dot.active {
-          width: 28px;
+        .cat-dot.active {
+          width: 22px;
           background: var(--color-primary);
-          box-shadow: 0 0 10px rgba(201, 166, 107, 0.5);
+          box-shadow: 0 0 8px rgba(201, 166, 107, 0.5);
+        }
+
+        /* 4. Bottom Action */
+        .cat-card-action {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          padding-top: 0.25rem;
+        }
+
+        .cat-view-details-btn {
+          width: 100%;
+          max-width: 420px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.55rem;
+          padding: 0.8rem 1.5rem;
+          border-radius: 9999px;
+          font-size: 0.92rem;
+          font-weight: 700;
+          border: none;
+          cursor: pointer;
+          box-sizing: border-box;
+          transition: all var(--transition-fast);
+          background: linear-gradient(135deg, var(--color-primary) 0%, #B89355 100%);
+          color: #1E2A45;
+          box-shadow: 0 4px 14px rgba(201, 166, 107, 0.3);
+        }
+
+        .cat-view-details-btn:hover {
+          background: #1E2A45;
+          color: #FFFFFF;
+          box-shadow: 0 6px 20px rgba(30, 42, 69, 0.25);
+          transform: translateY(-2px);
         }
       `}</style>
     </div>

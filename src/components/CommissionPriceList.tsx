@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
-import { motion } from 'motion/react';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import {
   WhatsappLogo,
   Sparkle,
   CheckCircle,
+  XCircle,
   CreditCard,
   ArrowsClockwise,
   Users,
   Image,
   CaretDown,
+  CaretLeft,
+  CaretRight,
 } from '@phosphor-icons/react';
 
 interface PricingPlan {
@@ -19,9 +22,12 @@ interface PricingPlan {
   priceNote?: string;
   badge?: string;
   popular?: boolean;
+  images: string[];
   features: string[];
   waTemplate: string;
 }
+
+const waPhoneNumber = '62859106729954';
 
 const pricingPlans: PricingPlan[] = [
   {
@@ -31,10 +37,11 @@ const pricingPlans: PricingPlan[] = [
     price: 'Rp 80.000',
     popular: true,
     badge: 'Popular Choice',
+    images: ['/photo/amai_hd.png', '/photo/work1.png'],
     features: [
       'Head to upper chest composition',
-      'Refined facial expression & hair shading',
-      'Simple atmospheric / abstract background',
+      'Custom pose',
+      'Simple / Abstract background',
       'High-resolution PNG file',
     ],
     waTemplate:
@@ -46,10 +53,11 @@ const pricingPlans: PricingPlan[] = [
     subtitle: 'Stylized Genshin-themed profile icon',
     price: 'Rp 100.000',
     badge: 'Icon Special',
+    images: ['/photo/amai_hd.png', '/photo/profil_amai.png'],
     features: [
-      'Official Genshin avatar framing & style',
+      'Official Genshin avatar framing & aesthetic',
       'Clean lighting & expressive character focus',
-      'Custom Vision / element themed aura',
+      'Custom Vision / elemental themed aura',
       'Square & transparent high-res PNG',
     ],
     waTemplate:
@@ -60,11 +68,11 @@ const pricingPlans: PricingPlan[] = [
     name: 'Half Body',
     subtitle: 'Head to waist / thigh artwork',
     price: 'Rp 150.000',
+    images: ['/photo/work1.png', '/photo/amai_hd.png'],
     features: [
-      'Dynamic half-body character pose',
-      'Detailed costume folds, armor & jewelry',
-      'Handheld weapon or prop included',
-      'High-res PNG with transparent background',
+      'Custom pose',
+      'Simple / Abstract background',
+      'High-res PNG + transparent background',
     ],
     waTemplate:
       'Halo Amai Vaelithys! Saya ingin memesan komisi paket *Half Body* (Rp 150.000).\n\n• Nama Karakter:\n• Konsep & Pose:\n• Kostum / Aksesoris:\n• Detail Background:',
@@ -74,11 +82,12 @@ const pricingPlans: PricingPlan[] = [
     name: 'Full Body',
     subtitle: 'Complete head-to-toe illustration',
     price: 'Rp 200.000',
+    images: ['/photo/work1.png', '/photo/profil_amai.png'],
     features: [
+      'Custom pose',
       'Full head-to-toe character artwork',
-      'Complex costume anatomy, weapons & effects',
-      'Atmospheric color harmony & highlights',
-      'Ultra high-res PNG + transparent render',
+      'Simple / Abstract background',
+      'High-res PNG + transparent background',
     ],
     waTemplate:
       'Halo Amai Vaelithys! Saya ingin memesan komisi paket *Full Body* (Rp 200.000).\n\n• Nama Karakter:\n• Konsep & Pose:\n• Kostum & Detail Senjata:\n• Detail Background:',
@@ -86,13 +95,14 @@ const pricingPlans: PricingPlan[] = [
   {
     id: 'charasheet-simple',
     name: 'Character Sheet (Simple)',
-    subtitle: 'Turnaround reference & palette sheet',
+    subtitle: 'Turnaround reference & avatar sheet',
     price: 'Rp 250.000',
     priceNote: 'Start from',
+    images: ['/photo/work2.png', '/photo/work1.png'],
     features: [
-      'Front view & Back view character turnaround',
-      'Harmonic color palette swatches breakdown',
-      'Clean character specification callouts',
+      'Front view & Back view turnaround',
+      'A few accessory details',
+      'Avatar Icon included',
       'Ideal for VTuber / OC design reference',
     ],
     waTemplate:
@@ -100,42 +110,199 @@ const pricingPlans: PricingPlan[] = [
   },
   {
     id: 'genshin-drip',
-    name: 'Genshin Drip Art',
-    subtitle: 'Official splash card artwork style',
+    name: 'Genshin Drip Marketing',
+    subtitle: 'Genshin-style character render art',
     price: 'Rp 260.000',
     popular: true,
     badge: 'Signature Style',
+    images: ['/photo/profil_amai.png', '/photo/amai_hd.png'],
     features: [
-      'Authentic Genshin Impact splash art layout',
-      'Dynamic elemental splash FX & celestial aura',
-      'Custom Vision, Constellation & Region insignia',
-      'Full ultra high-res presentation graphic',
+      'Custom pose',
+      'Character only (not a splash art)',
+      'Free Genshin drip marketing background',
+      'Ultra high-res PNG + transparent',
     ],
     waTemplate:
-      'Halo Amai Vaelithys! Saya ingin memesan komisi paket *Genshin Drip Art* (Rp 260.000).\n\n• Nama Karakter / OC:\n• Vision / Element & Region:\n• Senjata & Konsep Splash Pose:\n• Detail Tambahan:',
+      'Halo Amai Vaelithys! Saya ingin memesan komisi paket *Genshin Drip Marketing* (Rp 260.000).\n\n• Nama Karakter / OC:\n• Vision / Element & Region:\n• Senjata & Konsep Pose:\n• Detail Tambahan:',
   },
   {
     id: 'charasheet-overdetailed',
     name: 'Character Sheet (Overdetailed)',
-    subtitle: 'Master tier turnaround & multi-angle sheet',
+    subtitle: 'Master tier multi-angle reference sheet',
     price: 'Rp 500.000',
     priceNote: 'Start from',
     badge: 'Master Reference',
+    images: ['/photo/work2.png', '/photo/profil_amai.png'],
     features: [
       'Comprehensive multi-angle turnaround (Front, Back, 3/4)',
-      'Weapon, artifacts & detailed accessory close-ups',
-      'Multiple facial expression callouts',
-      'Complete typography, lore summary & specs',
+      'Accessory & outfit details (overdetailed)',
+      'Avatar Icon included',
+      'Lore summary & character specs',
     ],
     waTemplate:
       'Halo Amai Vaelithys! Saya ingin memesan komisi paket *Character Sheet Overdetailed* (Start from Rp 500.000).\n\n• Nama Karakter:\n• Deskripsi Lengkap & Lore:\n• Aksesoris, Senjata & Close-up:\n• Ekspresi / Detail Tambahan:',
   },
 ];
 
-const waPhoneNumber = '62859106729954';
+// Reusable image swipe slider embedded inside each pricing card
+function CardImageSlider({ images, title }: { images: string[]; title: string }) {
+  const [currentIdx, setCurrentIdx] = useState(0);
+  const [slideKey, setSlideKey] = useState(0);
+  const [direction, setDirection] = useState(1);
+  const [isPaused, setIsPaused] = useState(false);
+  const counterRef = useRef(0);
+
+  const nextImg = () => {
+    counterRef.current += 1;
+    setDirection(1);
+    setCurrentIdx((prev) => (prev + 1) % images.length);
+    setSlideKey(counterRef.current);
+  };
+
+  const prevImg = () => {
+    counterRef.current += 1;
+    setDirection(-1);
+    setCurrentIdx((prev) => (prev - 1 + images.length) % images.length);
+    setSlideKey(counterRef.current);
+  };
+
+  // Auto-swipe image every 4s, only transitions the image locally without any page scrolling
+  useEffect(() => {
+    if (isPaused || images.length <= 1) return;
+    const timer = setInterval(nextImg, 4000);
+    return () => clearInterval(timer);
+  }, [isPaused, currentIdx, images.length]);
+
+  const handleDragEnd = (_: any, info: { offset: { x: number }; velocity: { x: number } }) => {
+    setIsPaused(false);
+    const threshold = 35;
+    if (info.offset.x < -threshold || info.velocity.x < -250) {
+      nextImg();
+    } else if (info.offset.x > threshold || info.velocity.x > 250) {
+      prevImg();
+    }
+  };
+
+  const transition = {
+    type: 'spring' as const,
+    stiffness: 340,
+    damping: 34,
+    mass: 0.9,
+  };
+
+  const enterX = direction === 1 ? '100%' : '-100%';
+  const exitX = direction === 1 ? '-100%' : '100%';
+
+  return (
+    <div className="card-slider-wrapper">
+      <div
+        className="card-slider-stage"
+        onMouseDown={() => setIsPaused(true)}
+        onMouseUp={() => setIsPaused(false)}
+        onTouchStart={() => setIsPaused(true)}
+        onTouchEnd={() => setIsPaused(false)}
+        onTouchCancel={() => setIsPaused(false)}
+      >
+        <AnimatePresence mode="sync">
+          <motion.div
+            key={slideKey}
+            initial={{ x: enterX }}
+            animate={{ x: 0 }}
+            exit={{ x: exitX }}
+            transition={transition}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.12}
+            onDragStart={() => setIsPaused(true)}
+            onDragEnd={handleDragEnd}
+            className="card-slider-slide"
+            style={{
+              position: slideKey === 0 ? 'relative' : 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              cursor: 'grab',
+              willChange: 'transform',
+            }}
+          >
+            <img
+              src={images[currentIdx]}
+              alt={`${title} Artwork Example ${currentIdx + 1}`}
+              className="card-slider-img"
+              draggable={false}
+            />
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Counter Badge */}
+        {images.length > 1 && (
+          <div className="card-slider-counter">
+            0{currentIdx + 1} / 0{images.length}
+          </div>
+        )}
+      </div>
+
+      {/* Slider Controls */}
+      {images.length > 1 && (
+        <div className="card-slider-nav">
+          <button
+            type="button"
+            className="slider-nav-btn prev-btn"
+            onClick={prevImg}
+            aria-label={`Previous ${title} example`}
+          >
+            <CaretLeft size={14} weight="bold" />
+          </button>
+
+          <div className="slider-dots">
+            {images.map((_, idx) => (
+              <button
+                key={idx}
+                type="button"
+                className={`slider-dot ${idx === currentIdx ? 'active' : ''}`}
+                onClick={() => {
+                  counterRef.current += 1;
+                  setDirection(idx >= currentIdx ? 1 : -1);
+                  setCurrentIdx(idx);
+                  setSlideKey(counterRef.current);
+                }}
+                aria-label={`Go to ${title} example ${idx + 1}`}
+              />
+            ))}
+          </div>
+
+          <button
+            type="button"
+            className="slider-nav-btn next-btn"
+            onClick={nextImg}
+            aria-label={`Next ${title} example`}
+          >
+            <CaretRight size={14} weight="bold" />
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function CommissionPriceList() {
   const [expandedPlans, setExpandedPlans] = useState<string[]>([]);
+
+  // On desktop (≥768px), auto-expand all cards so features are always visible
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(min-width: 768px)');
+    const handleChange = (e: MediaQueryListEvent | MediaQueryList) => {
+      if (e.matches) {
+        setExpandedPlans(pricingPlans.map((p) => p.id));
+      } else {
+        setExpandedPlans([]);
+      }
+    };
+    handleChange(mediaQuery);
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
 
   const toggleExpand = (id: string) => {
     setExpandedPlans((prev) =>
@@ -145,9 +312,9 @@ export default function CommissionPriceList() {
 
   return (
     <div className="pricing-wrapper">
-      {/* 7 Pricing Cards Grid */}
+      {/* 7 Pricing Cards with Embedded Image Swiper */}
       <div className="pricing-grid">
-        {pricingPlans.map((plan, index) => {
+        {pricingPlans.map((plan) => {
           const isExpanded = expandedPlans.includes(plan.id);
           const encodedMessage = encodeURIComponent(plan.waTemplate);
           const waUrl = `https://wa.me/${waPhoneNumber}?text=${encodedMessage}`;
@@ -155,11 +322,12 @@ export default function CommissionPriceList() {
           return (
             <motion.div
               key={plan.id}
+              id={`pricing-${plan.id}`}
               className={`pricing-card card-royal ${plan.popular ? 'pricing-card-highlight' : ''}`}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.5, delay: index * 0.08 }}
+              transition={{ duration: 0.5 }}
             >
               {/* Badge if available */}
               {plan.badge && (
@@ -185,44 +353,61 @@ export default function CommissionPriceList() {
                 <div className="pricing-price-val">{plan.price}</div>
               </div>
 
-              {/* Mobile Toggle Button (Visible only on mobile) */}
+              {/* 🖼️ Embedded Swipe Image Showcase */}
+              <CardImageSlider images={plan.images} title={plan.name} />
+
+              {/* Mobile Toggle Button (Striking & Eye-catching for mobile users) */}
               <button
                 type="button"
-                className="mobile-details-toggle"
+                className={`mobile-details-toggle ${isExpanded ? 'toggle-open' : ''}`}
                 onClick={() => toggleExpand(plan.id)}
                 aria-expanded={isExpanded}
               >
-                <span>{isExpanded ? 'Hide Package Details' : 'View Package Details'}</span>
+                <span className="toggle-label-wrap">
+                  <Sparkle size={15} weight="fill" className="toggle-sparkle" />
+                  <span>{isExpanded ? 'Hide Package Details' : 'View Package Details'}</span>
+                </span>
                 <motion.span
                   className="toggle-icon-wrap"
                   animate={{ rotate: isExpanded ? 180 : 0 }}
                   transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <CaretDown size={14} weight="bold" />
+                  <CaretDown size={15} weight="bold" />
                 </motion.span>
               </button>
 
-              {/* Feature List (Collapsible on mobile like FAQ, fully expanded on desktop) */}
-              <div
-                className={`pricing-features-accordion ${isExpanded ? 'accordion-open' : ''}`}
-              >
-                <div className="features-inner">
-                  <ul className="pricing-features">
-                    {plan.features.map((feat, fIdx) => (
-                      <li key={fIdx} className="pricing-feature-item">
-                        <CheckCircle
-                          size={17}
-                          weight="fill"
-                          className="feature-icon"
-                        />
-                        <span>{feat}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
+              {/* Feature List — Framer Motion height:auto accordion (mobile) / always visible (desktop) */}
+              <AnimatePresence initial={false}>
+                {isExpanded && (
+                  <motion.div
+                    key="features"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{
+                      height: { duration: 0.38, ease: [0.16, 1, 0.3, 1] },
+                      opacity: { duration: 0.24, ease: 'easeInOut' },
+                    }}
+                    style={{ overflow: 'hidden' }}
+                    className="pricing-features-mobile-animated"
+                  >
+                    <ul className="pricing-features">
+                      {plan.features.map((feat, fIdx) => (
+                        <li key={fIdx} className="pricing-feature-item">
+                          <CheckCircle
+                            size={17}
+                            weight="fill"
+                            className="feature-icon"
+                          />
+                          <span>{feat}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
-              {/* WhatsApp Order Button with uniform gold primary styling */}
+              {/* WhatsApp Direct Order Button */}
               <div className="pricing-action">
                 <a
                   href={waUrl}
@@ -302,6 +487,24 @@ export default function CommissionPriceList() {
               </p>
             </div>
           </div>
+
+          {/* Do & Don't Guidelines — single matching card */}
+          <div className="terms-item terms-item-full">
+            <div className="terms-icon-wrap">
+              <CheckCircle size={20} weight="bold" />
+            </div>
+            <div className="terms-info">
+              <span className="terms-label">Do & Don't Guidelines</span>
+              <div className="terms-dodont-group">
+                <p className="terms-desc">
+                  <strong>DO:</strong> Male/Female, Fanart/OCs, Couple/Yumeship.
+                </p>
+                <p className="terms-desc">
+                  <strong>DON'T:</strong> NSFW (Suggestive is OK), LGBT, Furry, Mecha/Armor, Gore (slight blood is OK), Old character.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </motion.div>
 
@@ -320,7 +523,7 @@ export default function CommissionPriceList() {
         .pricing-grid {
           display: grid;
           grid-template-columns: minmax(0, 1fr);
-          gap: 1.5rem;
+          gap: 1.75rem;
           width: 100%;
           box-sizing: border-box;
         }
@@ -328,34 +531,41 @@ export default function CommissionPriceList() {
         @media (min-width: 640px) {
           .pricing-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 1.5rem;
+            gap: 1.75rem;
           }
         }
 
         @media (min-width: 1024px) {
           .pricing-grid {
             grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 1.75rem;
+            gap: 2rem;
           }
         }
 
         /* Individual Card */
         .pricing-card {
           background: #FFFFFF;
-          border-radius: 1.4rem;
+          border-radius: 1.5rem;
           border: 1.5px solid var(--color-border-subtle);
-          padding: 1.75rem 1.5rem;
+          padding: 1.6rem 1.4rem;
           display: flex;
           flex-direction: column;
           position: relative;
           box-sizing: border-box;
+          gap: 1rem;
           transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
                       border-color 0.3s ease,
                       box-shadow 0.3s ease;
         }
 
+        @media (min-width: 768px) {
+          .pricing-card {
+            padding: 1.75rem 1.5rem;
+          }
+        }
+
         .pricing-card:hover {
-          transform: translateY(-6px);
+          transform: translateY(-5px);
           border-color: var(--color-border-gold);
           box-shadow: 0 16px 36px rgba(30, 42, 69, 0.1), 0 4px 14px rgba(201, 166, 107, 0.15);
         }
@@ -372,7 +582,7 @@ export default function CommissionPriceList() {
 
         /* Badge */
         .pricing-badge-wrap {
-          margin-bottom: 0.85rem;
+          margin-bottom: 0.25rem;
         }
 
         .pricing-badge {
@@ -392,7 +602,7 @@ export default function CommissionPriceList() {
 
         /* Header */
         .pricing-header {
-          margin-bottom: 1.15rem;
+          margin-bottom: 0.25rem;
         }
 
         .pricing-title {
@@ -401,7 +611,7 @@ export default function CommissionPriceList() {
           font-weight: 700;
           color: var(--color-secondary);
           line-height: 1.25;
-          margin: 0 0 0.35rem 0;
+          margin: 0 0 0.3rem 0;
         }
 
         .pricing-subtitle {
@@ -416,13 +626,12 @@ export default function CommissionPriceList() {
           display: flex;
           flex-direction: column;
           gap: 0.15rem;
-          padding-bottom: 1.25rem;
-          margin-bottom: 1.25rem;
+          padding-bottom: 0.85rem;
           border-bottom: 1px solid var(--color-border-subtle);
         }
 
         .pricing-price-note {
-          font-size: 0.75rem;
+          font-size: 0.72rem;
           font-weight: 600;
           color: var(--color-text-muted);
           text-transform: uppercase;
@@ -431,34 +640,176 @@ export default function CommissionPriceList() {
 
         .pricing-price-val {
           font-family: var(--font-serif);
-          font-size: 1.75rem;
+          font-size: 1.65rem;
           font-weight: 700;
           color: var(--color-text-gold);
           line-height: 1;
         }
 
-        /* Mobile Details Toggle Button */
+        /* 🖼️ Embedded Image Slider inside Card */
+        .card-slider-wrapper {
+          display: flex;
+          flex-direction: column;
+          gap: 0.65rem;
+          width: 100%;
+          box-sizing: border-box;
+        }
+
+        .card-slider-stage {
+          position: relative;
+          width: 100%;
+          height: 260px;
+          border-radius: 1.15rem;
+          overflow: hidden;
+          background: linear-gradient(135deg, #FAF7F0 0%, #EFF6F8 100%);
+          border: 1px solid var(--color-border-subtle);
+          touch-action: pan-y;
+          user-select: none;
+        }
+
+        @media (min-width: 768px) {
+          .card-slider-stage {
+            height: 280px;
+          }
+        }
+
+        .card-slider-slide {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .card-slider-img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          padding: 0.5rem;
+          pointer-events: none;
+          user-select: none;
+          -webkit-user-drag: none;
+          transition: transform 0.35s ease;
+        }
+
+        .pricing-card:hover .card-slider-img {
+          transform: scale(1.03);
+        }
+
+        .card-slider-counter {
+          position: absolute;
+          bottom: 8px;
+          right: 10px;
+          background: rgba(30, 42, 69, 0.7);
+          backdrop-filter: blur(6px);
+          color: #FFFFFF;
+          font-family: monospace;
+          font-size: 0.7rem;
+          font-weight: 700;
+          padding: 0.15rem 0.5rem;
+          border-radius: 9999px;
+          border: 1px solid rgba(201, 166, 107, 0.4);
+          z-index: 5;
+          pointer-events: none;
+        }
+
+        .card-slider-nav {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.6rem;
+          width: 100%;
+        }
+
+        .slider-nav-btn {
+          width: 26px;
+          height: 26px;
+          border-radius: 50%;
+          background: #FFFFFF;
+          border: 1px solid var(--color-border-gold);
+          color: var(--color-secondary);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          box-shadow: 0 1px 4px rgba(30, 42, 69, 0.05);
+          flex-shrink: 0;
+        }
+
+        .slider-nav-btn:hover {
+          background: var(--color-secondary);
+          color: #FFFFFF;
+          border-color: var(--color-secondary);
+        }
+
+        .slider-dots {
+          display: flex;
+          align-items: center;
+          gap: 0.35rem;
+        }
+
+        .slider-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 9999px;
+          background: var(--color-border);
+          border: none;
+          cursor: pointer;
+          transition: width 0.25s ease, background-color 0.25s ease;
+          padding: 0;
+        }
+
+        .slider-dot.active {
+          width: 18px;
+          background: var(--color-primary);
+          box-shadow: 0 0 6px rgba(201, 166, 107, 0.4);
+        }
+
+        /* Mobile Details Toggle Button - Eye-Catching & Gold Accented */
         .mobile-details-toggle {
           display: flex;
           align-items: center;
           justify-content: space-between;
           width: 100%;
-          background: var(--color-surface-soft);
-          border: 1px solid var(--color-border-subtle);
-          border-radius: 0.75rem;
-          padding: 0.65rem 0.9rem;
-          font-size: 0.82rem;
-          font-weight: 600;
+          background: linear-gradient(135deg, #FFFDF8 0%, #F5EEDC 100%);
+          border: 1.5px solid var(--color-primary);
+          border-radius: 0.85rem;
+          padding: 0.72rem 0.95rem;
+          font-size: 0.88rem;
+          font-weight: 700;
           color: var(--color-secondary);
           cursor: pointer;
-          margin-bottom: 1rem;
           box-sizing: border-box;
-          transition: background-color 0.2s ease, border-color 0.2s ease;
+          box-shadow: 0 3px 10px rgba(201, 166, 107, 0.18);
+          transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .mobile-details-toggle:hover {
-          border-color: var(--color-border-gold);
-          background: var(--color-primary-subtle);
+        .mobile-details-toggle:hover,
+        .mobile-details-toggle:active {
+          background: linear-gradient(135deg, #F5EEDC 0%, #E8DCBE 100%);
+          box-shadow: 0 5px 15px rgba(201, 166, 107, 0.3);
+          transform: translateY(-1px);
+        }
+
+        .mobile-details-toggle.toggle-open {
+          background: var(--color-secondary);
+          color: #FFFFFF;
+          border-color: var(--color-secondary);
+          box-shadow: 0 4px 14px rgba(30, 42, 69, 0.2);
+        }
+
+        .toggle-label-wrap {
+          display: flex;
+          align-items: center;
+          gap: 0.45rem;
+        }
+
+        .toggle-sparkle {
+          color: var(--color-primary);
+          transition: transform 0.2s ease;
+        }
+
+        .mobile-details-toggle.toggle-open .toggle-sparkle {
+          color: var(--color-primary-light);
         }
 
         .toggle-icon-wrap {
@@ -466,42 +817,35 @@ export default function CommissionPriceList() {
           display: flex;
           align-items: center;
           justify-content: center;
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          background: rgba(201, 166, 107, 0.18);
+          transition: all 0.25s ease;
         }
 
-        /* Features Accordion Container */
-        .pricing-features-accordion {
-          display: grid;
-          grid-template-rows: 0fr;
-          opacity: 0;
-          transition: grid-template-rows 0.32s cubic-bezier(0.25, 1, 0.5, 1),
-                      opacity 0.25s ease;
-          overflow: hidden;
-          margin-bottom: 0;
+        .mobile-details-toggle.toggle-open .toggle-icon-wrap {
+          background: rgba(255, 255, 255, 0.18);
+          color: #FFFFFF;
         }
 
-        .pricing-features-accordion.accordion-open {
-          grid-template-rows: 1fr;
-          opacity: 1;
-          margin-bottom: 0.5rem;
+        /* Features Accordion — Framer Motion handles the animation,
+           these CSS rules control mobile vs desktop visibility */
+
+        /* Mobile animated accordion: shown by AnimatePresence */
+        .pricing-features-mobile-animated {
+          padding-bottom: 0.35rem;
         }
 
-        .features-inner {
-          overflow: hidden;
+        /* Desktop: always visible features list */
+        .pricing-features-desktop {
+          display: none;
         }
 
-        /* On Desktop (tablets & wider), always show details without toggle button */
+        /* Mobile toggle hidden on desktop since features are auto-expanded */
         @media (min-width: 768px) {
           .mobile-details-toggle {
             display: none;
-          }
-
-          .pricing-features-accordion {
-            display: block;
-            grid-template-rows: none;
-            opacity: 1;
-            overflow: visible;
-            flex: 1;
-            margin-bottom: 0;
           }
         }
 
@@ -509,19 +853,19 @@ export default function CommissionPriceList() {
         .pricing-features {
           list-style: none;
           padding: 0;
-          margin: 0 0 1.5rem 0;
+          margin: 0 0 1rem 0;
           display: flex;
           flex-direction: column;
-          gap: 0.75rem;
+          gap: 0.65rem;
         }
 
         .pricing-feature-item {
           display: flex;
           align-items: flex-start;
-          gap: 0.6rem;
-          font-size: 0.85rem;
+          gap: 0.55rem;
+          font-size: 0.84rem;
           color: var(--color-text);
-          line-height: 1.45;
+          line-height: 1.4;
         }
 
         .feature-icon {
@@ -530,10 +874,11 @@ export default function CommissionPriceList() {
           margin-top: 0.1rem;
         }
 
-        /* Action Buttons - Uniform Gold Primary for all cards */
+        /* Action Buttons */
         .pricing-action {
           margin-top: auto;
           width: 100%;
+          padding-top: 0.5rem;
         }
 
         .pricing-btn {
@@ -659,6 +1004,16 @@ export default function CommissionPriceList() {
           color: var(--color-text);
           line-height: 1.5;
           margin: 0;
+        }
+
+        .terms-item-full {
+          grid-column: 1 / -1;
+        }
+
+        .terms-dodont-group {
+          display: flex;
+          flex-direction: column;
+          gap: 0.35rem;
         }
       `}</style>
     </div>

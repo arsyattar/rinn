@@ -26,17 +26,11 @@ export default function ScrollRevealSection({
     offset: ['start end', 'end start'],
   });
 
-  // Smooth entry at bottom and exit at top
-  const opacity = useTransform(
-    scrollYProgress,
-    [0, 0.12, 0.88, 1],
-    [0.2, 1, 1, 0.15]
-  );
-
+  // Smooth subtle translateY entry without dimming text opacity
   const y = useTransform(
     scrollYProgress,
-    [0, 0.15, 0.85, 1],
-    [35, 0, 0, -30]
+    [0, 0.1, 0.9, 1],
+    [20, 0, 0, -10]
   );
 
   // Break title into words for character/word staggered reveal
@@ -46,7 +40,7 @@ export default function ScrollRevealSection({
     <motion.section
       ref={sectionRef}
       id={id}
-      style={{ opacity, y }}
+      style={{ y }}
       className={`scroll-reveal-section ${className}`}
     >
       <div className="container">
@@ -74,7 +68,7 @@ export default function ScrollRevealSection({
               visible: {
                 opacity: 1,
                 transition: {
-                  staggerChildren: 0.05,
+                  staggerChildren: 0.04,
                 },
               },
             }}
@@ -108,7 +102,6 @@ export default function ScrollRevealSection({
                     {char}
                   </motion.span>
                 ))}
-                {wIdx < words.length - 1 && <span className="word-space">&nbsp;</span>}
               </span>
             ))}
           </motion.h2>
@@ -158,9 +151,14 @@ export default function ScrollRevealSection({
 
         .section-header-reveal {
           text-align: center;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
           max-width: 760px;
           margin: 0 auto 2.5rem auto;
-          padding: 0 0.5rem;
+          padding: 0 1rem;
+          width: 100%;
           box-sizing: border-box;
         }
 
@@ -171,6 +169,8 @@ export default function ScrollRevealSection({
         }
 
         .section-badge-wrap {
+          display: flex;
+          justify-content: center;
           margin-bottom: 0.85rem;
         }
 
@@ -182,13 +182,14 @@ export default function ScrollRevealSection({
           letter-spacing: 0.01em;
           line-height: 1.25;
           margin-bottom: 0.85rem;
+          text-align: center;
+          width: 100%;
           perspective: 600px;
-          overflow-wrap: break-word;
-          word-break: break-word;
         }
 
         .word-wrapper {
           display: inline-block;
+          margin: 0 0.18em;
         }
 
         .char-reveal {
@@ -201,14 +202,13 @@ export default function ScrollRevealSection({
           color: var(--color-primary);
         }
 
-        .word-space {
-          display: inline-block;
-        }
-
         .section-reveal-subtitle {
-          font-size: clamp(0.88rem, 2vw, 1.05rem);
-          color: var(--color-text-muted);
+          font-size: clamp(0.92rem, 2vw, 1.08rem);
+          color: #2D3748;
+          font-weight: 500;
           line-height: 1.65;
+          text-align: center;
+          width: 100%;
           max-width: 600px;
           margin: 0 auto;
         }

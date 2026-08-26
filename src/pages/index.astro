@@ -3,9 +3,8 @@ import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar';
 import HeroSection from '../components/HeroSection';
 import ScrollRevealSection from '../components/ScrollRevealSection';
-import WorkCarousel from '../components/WorkCarousel';
-import FAQAccordion from '../components/FAQAccordion';
 import CommissionPriceList from '../components/CommissionPriceList';
+import FAQAccordion from '../components/FAQAccordion';
 import Footer from '../components/Footer.astro';
 ---
 
@@ -102,29 +101,18 @@ import Footer from '../components/Footer.astro';
 			</div>
 		</ScrollRevealSection>
 
-		{/* 2. Gallery Section — Horizontal Loop Carousel */}
-		<ScrollRevealSection
-			client:visible
-			id="gallery"
-			badge="Featured Gallery"
-			title="Some of My Works"
-			subtitle="Swipe through bespoke character concepts, model sheets, and fantasy artwork."
-		>
-			<WorkCarousel client:visible />
-		</ScrollRevealSection>
-
-		{/* 3. Pricing / Commission Packages Section */}
+		{/* 2. Pricing / Commission Packages Section with Embedded Artwork Swiper */}
 		<ScrollRevealSection
 			client:visible
 			id="contact"
 			badge="Commission Price List"
 			title="Let’s Create Something Celestial"
-			subtitle="Select your preferred commission package below to start your order with direct pre-filled details via WhatsApp."
+			subtitle="Swipe through sample artwork and select your preferred commission package below to order directly via WhatsApp."
 		>
 			<CommissionPriceList client:visible />
 		</ScrollRevealSection>
 
-		{/* 4. FAQ Section */}
+		{/* 3. FAQ Section */}
 		<ScrollRevealSection
 			client:visible
 			id="faq"

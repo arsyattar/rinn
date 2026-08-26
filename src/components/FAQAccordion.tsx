@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { CaretDown, Sparkle, WhatsappLogo, ChatDots } from '@phosphor-icons/react';
 
 interface FAQItem {
@@ -82,16 +82,27 @@ export default function FAQAccordion() {
                 </motion.div>
               </button>
 
-              {/*
-                CSS grid-template-rows trick: animating from 0fr -> 1fr
-                is fully GPU-accelerated and never causes layout jitter.
-              */}
-              <div className={`faq-answer-grid ${isOpen ? 'faq-answer-open' : ''}`}>
-                <div className="faq-answer-inner">
-                  <div className="faq-answer-divider" />
-                  <p className="faq-answer-text">{faq.answer}</p>
-                </div>
-              </div>
+              {/* Framer Motion height:auto accordion — smooth on iOS WebKit & all browsers */}
+              <AnimatePresence initial={false}>
+                {isOpen && (
+                  <motion.div
+                    key="answer"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{
+                      height: { duration: 0.38, ease: [0.16, 1, 0.3, 1] },
+                      opacity: { duration: 0.24, ease: 'easeInOut' },
+                    }}
+                    style={{ overflow: 'hidden' }}
+                  >
+                    <div className="faq-answer-inner">
+                      <div className="faq-answer-divider" />
+                      <p className="faq-answer-text">{faq.answer}</p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           );
         })}
@@ -240,23 +251,9 @@ export default function FAQAccordion() {
         }
 
         /*
-          The key to jitter-free accordion:
-          Animate grid-template-rows from 0fr -> 1fr.
-          This is compositor-friendly and never triggers layout shifts.
+          Framer Motion handles height animation — these classes only handle
+          padding/styling of the answer content itself.
         */
-        .faq-answer-grid {
-          display: grid;
-          grid-template-rows: 0fr;
-          transition: grid-template-rows 0.32s cubic-bezier(0.25, 1, 0.5, 1),
-                      opacity 0.25s ease;
-          opacity: 0;
-        }
-
-        .faq-answer-open {
-          grid-template-rows: 1fr;
-          opacity: 1;
-        }
-
         .faq-answer-inner {
           overflow: hidden;
           padding: 0 1.35rem 1.35rem 1.35rem;

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { List, X, Sparkle, ArrowRight, PaintBrushBroad } from '@phosphor-icons/react';
 
 interface NavItem {
@@ -8,7 +9,6 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { label: 'About', href: '#about' },
-  { label: 'Gallery', href: '#gallery' },
   { label: 'Pricing', href: '#contact' },
   { label: 'FAQ', href: '#faq' },
 ];
@@ -70,52 +70,102 @@ export default function Navbar() {
 
             <button
               type="button"
-              className="mobile-toggle-btn"
+              className={`mobile-toggle-btn ${mobileMenuOpen ? 'menu-open' : ''}`}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-expanded={mobileMenuOpen}
               aria-label={mobileMenuOpen ? 'Close Menu' : 'Open Menu'}
             >
-              {mobileMenuOpen ? (
-                <X size={22} weight="bold" />
-              ) : (
-                <List size={22} weight="bold" />
-              )}
+              <motion.div
+                animate={{ rotate: mobileMenuOpen ? 90 : 0 }}
+                transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              >
+                <AnimatePresence mode="wait" initial={false}>
+                  {mobileMenuOpen ? (
+                    <motion.span
+                      key="close"
+                      initial={{ opacity: 0, scale: 0.6 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.6 }}
+                      transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+                      style={{ display: 'flex' }}
+                    >
+                      <X size={22} weight="bold" />
+                    </motion.span>
+                  ) : (
+                    <motion.span
+                      key="open"
+                      initial={{ opacity: 0, scale: 0.6 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.6 }}
+                      transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+                      style={{ display: 'flex' }}
+                    >
+                      <List size={22} weight="bold" />
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </motion.div>
             </button>
           </div>
         </div>
 
-        {/* Mobile Dropdown Menu */}
-        {mobileMenuOpen && (
-          <div className="mobile-menu-panel">
-            <div className="mobile-menu-inner">
-              <ul className="mobile-nav-list">
-                {navItems.map((item) => (
-                  <li key={item.label}>
-                    <a
-                      href={item.href}
-                      className="mobile-nav-link"
-                      onClick={() => setMobileMenuOpen(false)}
+        {/* Mobile Dropdown Menu — Framer Motion smooth height animation */}
+        <AnimatePresence initial={false}>
+          {mobileMenuOpen && (
+            <motion.div
+              key="mobile-menu"
+              className="mobile-menu-panel"
+              initial={{ opacity: 0, height: 0, y: -8 }}
+              animate={{ opacity: 1, height: 'auto', y: 0 }}
+              exit={{ opacity: 0, height: 0, y: -8 }}
+              transition={{
+                duration: 0.38,
+                ease: [0.16, 1, 0.3, 1],
+                opacity: { duration: 0.22 },
+              }}
+              style={{ overflow: 'hidden' }}
+            >
+              <div className="mobile-menu-inner">
+                <ul className="mobile-nav-list">
+                  {navItems.map((item, idx) => (
+                    <motion.li
+                      key={item.label}
+                      initial={{ opacity: 0, x: -12 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.28, delay: 0.06 + idx * 0.05, ease: [0.16, 1, 0.3, 1] }}
                     >
-                      <span>{item.label}</span>
-                      <ArrowRight size={16} weight="regular" className="mobile-link-arrow" />
-                    </a>
-                  </li>
-                ))}
-              </ul>
+                      <a
+                        href={item.href}
+                        className="mobile-nav-link"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        <span>{item.label}</span>
+                        <ArrowRight size={16} weight="regular" className="mobile-link-arrow" />
+                      </a>
+                    </motion.li>
+                  ))}
+                </ul>
 
-              <div className="mobile-menu-footer">
-                <a
-                  href="#contact"
-                  className="mobile-btn-cta"
-                  onClick={() => setMobileMenuOpen(false)}
+                <motion.div
+                  className="mobile-menu-footer"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: 0.22, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <PaintBrushBroad size={18} weight="duotone" />
-                  <span>Get in Touch</span>
-                </a>
+                  <a
+                    href="#contact"
+                    className="mobile-btn-cta"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <PaintBrushBroad size={18} weight="duotone" />
+                    <span>Get in Touch</span>
+                  </a>
+                </motion.div>
               </div>
-            </div>
-          </div>
-        )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       <style>{`
@@ -326,7 +376,7 @@ export default function Navbar() {
           color: var(--color-text-gold);
         }
 
-        /* Mobile Dropdown Panel */
+        /* Mobile Dropdown Panel — animated by Framer Motion */
         .mobile-menu-panel {
           position: absolute;
           top: calc(100% + 0.5rem);
@@ -335,20 +385,18 @@ export default function Navbar() {
           background: #FFFFFF;
           border: 1px solid var(--color-border-gold);
           border-radius: 1.25rem;
-          padding: 1.25rem;
           box-shadow: 0 16px 40px rgba(30, 42, 69, 0.16);
-          animation: slideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+          /* overflow: hidden handled inline by motion.div */
         }
 
-        @keyframes slideDown {
-          from {
-            opacity: 0;
-            transform: translateY(-8px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+        .mobile-menu-inner {
+          padding: 1.25rem;
+        }
+
+        .mobile-toggle-btn.menu-open {
+          background: var(--color-primary-subtle);
+          border-color: var(--color-primary);
+          color: var(--color-text-gold);
         }
 
         .mobile-nav-list {

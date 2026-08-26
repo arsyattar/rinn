@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Sparkle, Eye, WhatsappLogo } from '@phosphor-icons/react';
+import { Sparkle, User, WhatsappLogo } from '@phosphor-icons/react';
 import NametageCard from './InteractiveNametag';
 
 export default function HeroSection() {
@@ -119,8 +119,8 @@ export default function HeroSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.78, ease: [0.16, 1, 0.3, 1] }}
             >
-              <a href="#gallery" className="btn-primary hero-btn">
-                <Eye size={16} weight="bold" /><span>View Gallery</span>
+              <a href="#about" className="btn-primary hero-btn">
+                <User size={16} weight="bold" /><span>About Artist</span>
               </a>
               <a
                 href="#contact"
