@@ -30,14 +30,16 @@ import Footer from '../components/Footer.astro';
 					{/* Left: Character Portrait (Frameless & Clean) */}
 					<div class="genshin-card-col">
 						<div class="genshin-card-stack">
-							<div class="genshin-portrait-wrap">
-								<img
-									src="/photo/amai_hd_new.png"
-									alt="Amai Vaelithys — Genshin OC"
-									class="genshin-oc-portrait"
-									loading="eager"
-								/>
-							</div>
+								<picture>
+									<source srcset="/photo/amai_hd_new.webp" type="image/webp" />
+									<img
+										src="/photo/amai_hd_new.png"
+										alt="Amai Vaelithys — Genshin OC"
+										class="genshin-oc-portrait"
+										loading="lazy"
+										decoding="async"
+									/>
+								</picture>
 						</div>
 						<div class="genshin-rarity-stars">
 							<span class="star-icon">⭐</span>

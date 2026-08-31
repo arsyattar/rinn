@@ -38,6 +38,10 @@ const {
 		<!-- Preconnect to Google Fonts -->
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+		<!-- Preload gambar kritis (above-the-fold) agar browser mulai download lebih awal -->
+		<link rel="preload" as="image" href="/photo/hero.jpeg" fetchpriority="high" />
+		<link rel="preload" as="image" href="/photo/profil_amai_new.webp" type="image/webp" fetchpriority="high" />
 	</head>
 	<body>
 		<slot />

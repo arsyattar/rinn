@@ -15,15 +15,15 @@ const categoriesData: CategoryItem[] = [
     id: 'bust-up',
     title: 'Bust Up',
     price: 'Rp 80.000',
-    images: ['/photo/bust_up/bust_up1.png', '/photo/bust_up/bust_up2.png'],
+    images: ['/photo/bust_up/bust_up1.webp', '/photo/bust_up/bust_up2.webp'],
   },
   {
     id: 'genshin-icon',
     title: 'Genshin Avatar Icon',
     price: 'Rp 100.000',
     images: [
-      '/photo/Genshin_Avatar_%20Icon/avatar_icon1.png',
-      '/photo/Genshin_Avatar_%20Icon/avatar_icon2.png',
+      '/photo/Genshin_Avatar_%20Icon/avatar_icon1.webp',
+      '/photo/Genshin_Avatar_%20Icon/avatar_icon2.webp',
     ],
   },
   {
@@ -31,14 +31,14 @@ const categoriesData: CategoryItem[] = [
     title: 'Half Body',
     price: 'Rp 150.000',
     images: [
-      '/photo/Half_Body/halfbody1.png',
-      '/photo/Half_Body/halfbody2.png',
-      '/photo/Half_Body/halfbody3.png',
-      '/photo/Half_Body/halfbody4.png',
-      '/photo/Half_Body/halfbody5.png',
-      '/photo/Half_Body/halfbody6.png',
-      '/photo/Half_Body/halfbody7.png',
-      '/photo/Half_Body/Couple%236.png',
+      '/photo/Half_Body/halfbody1.webp',
+      '/photo/Half_Body/halfbody2.webp',
+      '/photo/Half_Body/halfbody3.webp',
+      '/photo/Half_Body/halfbody4.webp',
+      '/photo/Half_Body/halfbody5.webp',
+      '/photo/Half_Body/halfbody6.webp',
+      '/photo/Half_Body/halfbody7.webp',
+      '/photo/Half_Body/Couple%236.webp',
     ],
   },
   {
@@ -46,11 +46,11 @@ const categoriesData: CategoryItem[] = [
     title: 'Full Body',
     price: 'Rp 200.000',
     images: [
-      '/photo/full_body/fullbody1.png',
-      '/photo/full_body/fullbody2.png',
-      '/photo/full_body/fullbody3.png',
-      '/photo/full_body/fullbody4.png',
-      '/photo/full_body/fullbody5.png',
+      '/photo/full_body/fullbody1.webp',
+      '/photo/full_body/fullbody2.webp',
+      '/photo/full_body/fullbody3.webp',
+      '/photo/full_body/fullbody4.webp',
+      '/photo/full_body/fullbody5.webp',
     ],
   },
   {
@@ -58,16 +58,16 @@ const categoriesData: CategoryItem[] = [
     title: 'Character Sheet (Simple)',
     price: 'Rp 250.000',
     priceNote: 'Start from',
-    images: ['/photo/charactersheet_simple/simple1.png'],
+    images: ['/photo/charactersheet_simple/simple1.webp'],
   },
   {
     id: 'genshin-drip',
     title: 'Genshin Drip Art',
     price: 'Rp 260.000',
     images: [
-      '/photo/genshin_drip_marketing/drip_marketing1.png',
-      '/photo/genshin_drip_marketing/drip_marketing2.png',
-      '/photo/genshin_drip_marketing/drip_marketing3.png',
+      '/photo/genshin_drip_marketing/drip_marketing1.webp',
+      '/photo/genshin_drip_marketing/drip_marketing2.webp',
+      '/photo/genshin_drip_marketing/drip_marketing3.webp',
     ],
   },
   {
@@ -75,7 +75,7 @@ const categoriesData: CategoryItem[] = [
     title: 'Character Sheet (Overdetailed)',
     price: 'Rp 500.000',
     priceNote: 'Start from',
-    images: ['/photo/charactersheet_overdetailed/overdetailed1.png'],
+    images: ['/photo/charactersheet_overdetailed/overdetailed1.webp'],
   },
 ];
 

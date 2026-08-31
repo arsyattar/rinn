@@ -52,10 +52,11 @@ export default function InteractiveNametag() {
             {/* Profile Avatar Image */}
             <div className="card-avatar-box">
               <img
-                src="/photo/profil_amai_new.png"
+                src="/photo/profil_amai_new.webp"
                 alt="Amai Vaelithys Profile"
                 className="card-avatar-img"
                 draggable={false}
+                decoding="async"
               />
               <div className="avatar-sheen"></div>
             </div>
