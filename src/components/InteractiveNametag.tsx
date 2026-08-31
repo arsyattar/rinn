@@ -52,7 +52,7 @@ export default function InteractiveNametag() {
             {/* Profile Avatar Image */}
             <div className="card-avatar-box">
               <img
-                src="/photo/profil_amai.png"
+                src="/photo/profil_amai_new.png"
                 alt="Amai Vaelithys Profile"
                 className="card-avatar-img"
                 draggable={false}

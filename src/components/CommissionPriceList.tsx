@@ -70,7 +70,7 @@ const pricingPlans: PricingPlan[] = [
     price: 'Rp 80.000',
     popular: true,
     badge: 'Popular Choice',
-    images: ['/photo/amai_hd.png', '/photo/work1.png'],
+    images: ['/photo/bust_up/bust_up1.png', '/photo/bust_up/bust_up2.png'],
     features: [
       'Head to upper chest composition',
       'Custom pose',
@@ -86,7 +86,10 @@ const pricingPlans: PricingPlan[] = [
     subtitle: 'Stylized Genshin-themed profile icon',
     price: 'Rp 100.000',
     badge: 'Icon Special',
-    images: ['/photo/amai_hd.png', '/photo/profil_amai.png'],
+    images: [
+      '/photo/Genshin_Avatar_%20Icon/avatar_icon1.png',
+      '/photo/Genshin_Avatar_%20Icon/avatar_icon2.png',
+    ],
     features: [
       'Official Genshin avatar framing & aesthetic',
       'Clean lighting & expressive character focus',
@@ -101,7 +104,16 @@ const pricingPlans: PricingPlan[] = [
     name: 'Half Body',
     subtitle: 'Head to waist / thigh artwork',
     price: 'Rp 150.000',
-    images: ['/photo/work1.png', '/photo/amai_hd.png'],
+    images: [
+      '/photo/Half_Body/halfbody1.png',
+      '/photo/Half_Body/halfbody2.png',
+      '/photo/Half_Body/halfbody3.png',
+      '/photo/Half_Body/halfbody4.png',
+      '/photo/Half_Body/halfbody5.png',
+      '/photo/Half_Body/halfbody6.png',
+      '/photo/Half_Body/halfbody7.png',
+      '/photo/Half_Body/Couple%236.png',
+    ],
     features: [
       'Custom pose',
       'Simple / Abstract background',
@@ -115,7 +127,13 @@ const pricingPlans: PricingPlan[] = [
     name: 'Full Body',
     subtitle: 'Complete head-to-toe illustration',
     price: 'Rp 200.000',
-    images: ['/photo/work1.png', '/photo/profil_amai.png'],
+    images: [
+      '/photo/full_body/fullbody1.png',
+      '/photo/full_body/fullbody2.png',
+      '/photo/full_body/fullbody3.png',
+      '/photo/full_body/fullbody4.png',
+      '/photo/full_body/fullbody5.png',
+    ],
     features: [
       'Custom pose',
       'Full head-to-toe character artwork',
@@ -131,7 +149,7 @@ const pricingPlans: PricingPlan[] = [
     subtitle: 'Turnaround reference & avatar sheet',
     price: 'Rp 250.000',
     priceNote: 'Start from',
-    images: ['/photo/work2.png', '/photo/work1.png'],
+    images: ['/photo/charactersheet_simple/simple1.png'],
     features: [
       'Front view & Back view turnaround',
       'A few accessory details',
@@ -148,7 +166,11 @@ const pricingPlans: PricingPlan[] = [
     price: 'Rp 260.000',
     popular: true,
     badge: 'Signature Style',
-    images: ['/photo/profil_amai.png', '/photo/amai_hd.png'],
+    images: [
+      '/photo/genshin_drip_marketing/drip_marketing1.png',
+      '/photo/genshin_drip_marketing/drip_marketing2.png',
+      '/photo/genshin_drip_marketing/drip_marketing3.png',
+    ],
     features: [
       'Custom pose',
       'Character only (not a splash art)',
@@ -165,7 +187,7 @@ const pricingPlans: PricingPlan[] = [
     price: 'Rp 500.000',
     priceNote: 'Start from',
     badge: 'Master Reference',
-    images: ['/photo/work2.png', '/photo/profil_amai.png'],
+    images: ['/photo/charactersheet_overdetailed/overdetailed1.png'],
     features: [
       'Comprehensive multi-angle turnaround (Front, Back, 3/4)',
       'Accessory & outfit details (overdetailed)',
