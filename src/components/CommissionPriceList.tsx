@@ -77,7 +77,6 @@ const pricingPlans: PricingPlan[] = [
       '/photo/Half_Body/halfbody5.webp',
       '/photo/Half_Body/halfbody6.webp',
       '/photo/Half_Body/halfbody7.webp',
-      '/photo/Half_Body/couple6.webp',
     ],
     features: [
       'Head to upper chest composition',
@@ -116,6 +115,7 @@ const pricingPlans: PricingPlan[] = [
       '/photo/Half_Body/halfbody1.webp',
       '/photo/Half_Body/halfbody2.webp',
       '/photo/Half_Body/halfbody3.webp',
+      '/photo/Half_Body/couple6.webp',
     ],
     features: [
       'Custom pose',
