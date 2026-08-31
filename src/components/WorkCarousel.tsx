@@ -15,7 +15,15 @@ const categoriesData: CategoryItem[] = [
     id: 'bust-up',
     title: 'Bust Up',
     price: 'Rp 80.000',
-    images: ['/photo/bust_up/bust_up1.webp', '/photo/bust_up/bust_up2.webp'],
+    images: [
+      '/photo/bust_up/bust_up1.webp',
+      '/photo/bust_up/bust_up2.webp',
+      '/photo/Half_Body/halfbody4.webp',
+      '/photo/Half_Body/halfbody5.webp',
+      '/photo/Half_Body/halfbody6.webp',
+      '/photo/Half_Body/halfbody7.webp',
+      '/photo/Half_Body/couple6.webp',
+    ],
   },
   {
     id: 'genshin-icon',
@@ -34,11 +42,6 @@ const categoriesData: CategoryItem[] = [
       '/photo/Half_Body/halfbody1.webp',
       '/photo/Half_Body/halfbody2.webp',
       '/photo/Half_Body/halfbody3.webp',
-      '/photo/Half_Body/halfbody4.webp',
-      '/photo/Half_Body/halfbody5.webp',
-      '/photo/Half_Body/halfbody6.webp',
-      '/photo/Half_Body/halfbody7.webp',
-      '/photo/Half_Body/Couple%236.webp',
     ],
   },
   {

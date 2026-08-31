@@ -70,7 +70,15 @@ const pricingPlans: PricingPlan[] = [
     price: 'Rp 80.000',
     popular: true,
     badge: 'Popular Choice',
-    images: ['/photo/bust_up/bust_up1.webp', '/photo/bust_up/bust_up2.webp'],
+    images: [
+      '/photo/bust_up/bust_up1.webp',
+      '/photo/bust_up/bust_up2.webp',
+      '/photo/Half_Body/halfbody4.webp',
+      '/photo/Half_Body/halfbody5.webp',
+      '/photo/Half_Body/halfbody6.webp',
+      '/photo/Half_Body/halfbody7.webp',
+      '/photo/Half_Body/couple6.webp',
+    ],
     features: [
       'Head to upper chest composition',
       'Custom pose',
@@ -108,11 +116,6 @@ const pricingPlans: PricingPlan[] = [
       '/photo/Half_Body/halfbody1.webp',
       '/photo/Half_Body/halfbody2.webp',
       '/photo/Half_Body/halfbody3.webp',
-      '/photo/Half_Body/halfbody4.webp',
-      '/photo/Half_Body/halfbody5.webp',
-      '/photo/Half_Body/halfbody6.webp',
-      '/photo/Half_Body/halfbody7.webp',
-      '/photo/Half_Body/Couple%236.webp',
     ],
     features: [
       'Custom pose',
