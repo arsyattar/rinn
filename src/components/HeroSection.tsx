@@ -3,6 +3,11 @@ import { motion } from 'motion/react';
 import { Sparkle, User, WhatsappLogo } from '@phosphor-icons/react';
 import NametageCard from './InteractiveNametag';
 
+// =========================================================================
+// COMMISSION STATUS: Ubah ke 'CLOSED' atau 'OPEN' di sini
+// =========================================================================
+const COMMISSION_STATUS: 'OPEN' | 'CLOSED' = 'CLOSED';
+
 export default function HeroSection() {
   const name = "Amai Vaelithys";
   const letters = Array.from(name);
@@ -61,11 +66,9 @@ export default function HeroSection() {
           >
             {/* Status Badge */}
             <div className="hero-badge-wrap">
-              <span className="badge-gold">
-                <Sparkle size={12} weight="fill" />
-                <span>Alchemical Visuals</span>
-                <span className="badge-bullet">✦</span>
-                <span>Official Portfolio</span>
+              <span className={`badge-gold ${COMMISSION_STATUS === 'CLOSED' ? 'status-badge-closed' : 'status-badge-open'}`}>
+                <span className={`status-indicator-dot ${COMMISSION_STATUS === 'CLOSED' ? 'dot-closed' : 'dot-open'}`} />
+                <span>Commission Status : {COMMISSION_STATUS}</span>
               </span>
             </div>
 
@@ -299,9 +302,34 @@ export default function HeroSection() {
           margin-bottom: 0.75rem;
         }
 
-        .badge-bullet {
-          color: var(--color-primary);
-          font-size: 0.5rem;
+        .status-indicator-dot {
+          display: inline-block;
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          flex-shrink: 0;
+        }
+
+        .dot-closed {
+          background-color: #E05D5D;
+          box-shadow: 0 0 8px rgba(224, 93, 93, 0.6);
+        }
+
+        .dot-open {
+          background-color: #27AE60;
+          box-shadow: 0 0 8px rgba(39, 174, 96, 0.6);
+        }
+
+        .status-badge-closed {
+          background-color: rgba(224, 93, 93, 0.08);
+          border-color: rgba(224, 93, 93, 0.3);
+          color: #B23B3B;
+        }
+
+        .status-badge-open {
+          background-color: var(--color-primary-subtle);
+          border-color: var(--color-border-gold);
+          color: var(--color-text-gold);
         }
 
         /* Name */
