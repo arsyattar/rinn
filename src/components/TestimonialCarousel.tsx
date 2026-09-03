@@ -14,7 +14,7 @@ interface HandoverTestimonial {
 const handoversData: HandoverTestimonial[] = [
   {
     id: 1,
-    clientName: 'Huuna',
+    clientName: 'Hu****a',
     commissionType: 'Client Handover',
     chatScreenshot: '/photo/testimoni/1_huuna.webp',
     rating: 5,
@@ -22,7 +22,7 @@ const handoversData: HandoverTestimonial[] = [
   },
   {
     id: 2,
-    clientName: 'Pepperlaunch',
+    clientName: 'Pep*****nch',
     commissionType: 'Client Handover',
     chatScreenshot: '/photo/testimoni/2_pepperlaunch.webp',
     rating: 5,
@@ -30,7 +30,7 @@ const handoversData: HandoverTestimonial[] = [
   },
   {
     id: 3,
-    clientName: 'Ren',
+    clientName: 'R**',
     commissionType: 'Client Handover',
     chatScreenshot: '/photo/testimoni/3_ren.webp',
     rating: 5,
@@ -38,7 +38,7 @@ const handoversData: HandoverTestimonial[] = [
   },
   {
     id: 4,
-    clientName: 'Tepung Tapioka',
+    clientName: 'Tep*** Tap****',
     commissionType: 'Client Handover',
     chatScreenshot: '/photo/testimoni/4_tepungtapioka.webp',
     rating: 5,
@@ -46,7 +46,7 @@ const handoversData: HandoverTestimonial[] = [
   },
   {
     id: 5,
-    clientName: 'Zee',
+    clientName: 'Z**',
     commissionType: 'Client Handover',
     chatScreenshot: '/photo/testimoni/5_zee.webp',
     rating: 5,
@@ -54,7 +54,7 @@ const handoversData: HandoverTestimonial[] = [
   },
   {
     id: 6,
-    clientName: 'Klou',
+    clientName: 'Kl***',
     commissionType: 'Client Handover',
     chatScreenshot: '/photo/testimoni/6_klou.webp',
     rating: 5,
@@ -62,7 +62,7 @@ const handoversData: HandoverTestimonial[] = [
   },
   {
     id: 7,
-    clientName: 'Sunjaeyo',
+    clientName: 'Sun****yo',
     commissionType: 'Client Handover',
     chatScreenshot: '/photo/testimoni/7_sunjaeyo.webp',
     rating: 5,
@@ -70,7 +70,7 @@ const handoversData: HandoverTestimonial[] = [
   },
   {
     id: 8,
-    clientName: 'Harumii',
+    clientName: 'Ha****ii',
     commissionType: 'Client Handover',
     chatScreenshot: '/photo/testimoni/8_harumii.webp',
     rating: 5,
@@ -78,7 +78,7 @@ const handoversData: HandoverTestimonial[] = [
   },
   {
     id: 9,
-    clientName: 'Harumii #2',
+    clientName: 'Ha****ii #2',
     commissionType: 'Client Handover',
     chatScreenshot: '/photo/testimoni/9_harumii2.webp',
     rating: 5,
