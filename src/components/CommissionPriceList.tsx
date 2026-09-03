@@ -173,6 +173,7 @@ const pricingPlans: PricingPlan[] = [
       '/photo/genshin_drip_marketing/drip_marketing1.webp',
       '/photo/genshin_drip_marketing/drip_marketing2.webp',
       '/photo/genshin_drip_marketing/drip_marketing3.webp',
+      '/photo/genshin_drip_marketing/drip_marketing4.webp',
     ],
     features: [
       'Custom pose',
