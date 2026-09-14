@@ -1,47 +1,26 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { CaretDown, Sparkle, WhatsappLogo, ChatDots } from '@phosphor-icons/react';
-
-interface FAQItem {
-  id: number;
-  question: string;
-  answer: string;
-}
-
-const faqs: FAQItem[] = [
-  {
-    id: 1,
-    question: 'How long does the illustration process usually take?',
-    answer:
-      'Turnaround time is typically 1 to 2 weeks, depending on the complexity of the character details, pose, and background scenery.',
-  },
-  {
-    id: 2,
-    question: 'What payment methods and milestones are accepted?',
-    answer:
-      'Payment is made after the rough sketch is approved. You can choose to pay in Full or provide a Down Payment (DP), with the remaining balance settled once the artwork is completed. We accept PayPal for international clients, and SeaBank or all major E-Wallets (DANA, GoPay, OVO, ShopeePay) for local Indonesian clients.',
-  },
-  {
-    id: 3,
-    question: 'How does the revision policy work?',
-    answer:
-      'Each commission includes up to 3 complimentary revisions during the sketch stage. Additional revisions beyond 3x start from +Rp 10.000 per revision. Once the artwork enters the coloring stage, only color adjustments are permitted.',
-  },
-  {
-    id: 4,
-    question: 'How is commercial usage and licensing handled?',
-    answer:
-      'Commercial usage (such as YouTube thumbnails, VTuber assets, merchandise, cover art, or promotional business media) incurs an additional +100% of the base price (2x standard rate).',
-  },
-];
+import { useLanguage } from '../utils/i18n';
+import { translations } from '../utils/translations';
 
 const waPhoneNumber = '62859106729954';
-const waInquiryTemplate =
-  'Hello Amai Vaelithys! I visited your portfolio website and have a question regarding commissions / custom projects:\n\n• Name / Handle:\n• Question / Inquiries:';
-const encodedInquiry = encodeURIComponent(waInquiryTemplate);
-const waInquiryUrl = `https://wa.me/${waPhoneNumber}?text=${encodedInquiry}`;
 
 export default function FAQAccordion() {
+  const { lang } = useLanguage();
+  const faqData = translations[lang].faq;
+  const faqs = faqData.items.map((item, idx) => ({
+    id: idx + 1,
+    question: item.question,
+    answer: item.answer,
+  }));
+
+  const waInquiryTemplate = lang === 'id'
+    ? 'Halo Amai Vaelithys! Saya mengunjungi website portofolio Anda dan ingin bertanya terkait komisi / proyek kustom:\n\n• Nama / Akun:\n• Pertanyaan:'
+    : 'Hello Amai Vaelithys! I visited your portfolio website and have a question regarding commissions / custom projects:\n\n• Name / Handle:\n• Question / Inquiries:';
+  const encodedInquiry = encodeURIComponent(waInquiryTemplate);
+  const waInquiryUrl = `https://wa.me/${waPhoneNumber}?text=${encodedInquiry}`;
+
   const [openIds, setOpenIds] = useState<number[]>([]);
 
   const toggleFAQ = (id: number) => {
@@ -115,9 +94,9 @@ export default function FAQAccordion() {
             <ChatDots size={24} weight="bold" />
           </div>
           <div className="faq-inquiry-text">
-            <h4 className="faq-inquiry-title">Still have questions?</h4>
+            <h4 className="faq-inquiry-title">{lang === 'id' ? 'Masih punya pertanyaan?' : 'Still have questions?'}</h4>
             <p className="faq-inquiry-desc">
-              Have a special request, custom concept, or questions not covered in the FAQ? Send a direct message on WhatsApp!
+              {faqData.helpPrompt}
             </p>
           </div>
         </div>
@@ -131,7 +110,7 @@ export default function FAQAccordion() {
             aria-label="Ask a question via WhatsApp"
           >
             <WhatsappLogo size={18} weight="bold" />
-            <span>Ask a Question on WhatsApp</span>
+            <span>{faqData.helpBtn}</span>
           </a>
         </div>
       </div>

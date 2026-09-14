@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useLanguage } from '../utils/i18n';
+import { translations } from '../utils/translations';
 
 /**
  * Renders text letter-by-letter with the periodic wave animation.
@@ -346,6 +348,11 @@ function CardImageSlider({ images, title }: { images: string[]; title: string })
 }
 
 export default function CommissionPriceList() {
+  const { lang } = useLanguage();
+  const pricingData = translations[lang].pricing;
+  const pricingPlans = pricingData.plans;
+  const terms = pricingData.terms;
+
   const [expandedPlans, setExpandedPlans] = useState<string[]>([]);
 
   // On desktop (≥768px), auto-expand all cards so features are always visible
@@ -361,7 +368,7 @@ export default function CommissionPriceList() {
     handleChange(mediaQuery);
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
+  }, [pricingPlans]);
 
   const toggleExpand = (id: string) => {
     setExpandedPlans((prev) =>
@@ -426,7 +433,7 @@ export default function CommissionPriceList() {
               >
                 <span className="toggle-label-wrap">
                   <Sparkle size={15} weight="fill" className="toggle-sparkle" />
-                  <span>{isExpanded ? 'Hide Package Details' : 'View Package Details'}</span>
+                  <span>{isExpanded ? pricingData.toggleClose : pricingData.toggleOpen}</span>
                 </span>
                 <motion.span
                   className="toggle-icon-wrap"
@@ -478,7 +485,7 @@ export default function CommissionPriceList() {
                   aria-label={`Order ${plan.name} via WhatsApp`}
                 >
                   <WhatsappLogo size={18} weight="bold" />
-                  <span>Order {plan.name}</span>
+                  <span>{pricingData.orderBtnPrefix} {plan.name}</span>
                 </a>
               </div>
             </motion.div>
@@ -496,7 +503,7 @@ export default function CommissionPriceList() {
       >
         <div className="terms-header">
           <div className="terms-gem" />
-          <h4 className="terms-title"><WaveText text="Commission Terms & Guidelines" /></h4>
+          <h4 className="terms-title"><WaveText text={pricingData.termsTitle} /></h4>
           <div className="terms-gem" />
         </div>
 
@@ -506,10 +513,8 @@ export default function CommissionPriceList() {
               <Image size={20} weight="bold" />
             </div>
             <div className="terms-info">
-              <span className="terms-label">Additional Detail &amp; Background</span>
-              <p className="terms-desc">
-                +Rp 30.000 – Rp 200.000 depending on character complexity & detailed background scenery.
-              </p>
+              <span className="terms-label">{terms.detailsLabel}</span>
+              <p className="terms-desc">{terms.detailsDesc}</p>
             </div>
           </div>
 
@@ -518,10 +523,8 @@ export default function CommissionPriceList() {
               <Users size={20} weight="bold" />
             </div>
             <div className="terms-info">
-              <span className="terms-label">Commercial &amp; Couple Rate</span>
-              <p className="terms-desc">
-                Commercial use (YouTube thumbnails, VTuber, merch, business) is <strong>+100% (2x base price)</strong>. Couple artworks are 2x base price.
-              </p>
+              <span className="terms-label">{terms.commercialLabel}</span>
+              <p className="terms-desc">{terms.commercialDesc}</p>
             </div>
           </div>
 
@@ -530,10 +533,8 @@ export default function CommissionPriceList() {
               <CreditCard size={20} weight="bold" />
             </div>
             <div className="terms-info">
-              <span className="terms-label">Payment Milestones &amp; Methods</span>
-              <p className="terms-desc">
-                Payment after rough sketch approval (<strong>Full</strong> or <strong>DP</strong> with balance upon completion). <strong>PayPal</strong> (International) & <strong>SeaBank / All E-Wallets</strong> (Local).
-              </p>
+              <span className="terms-label">{terms.paymentLabel}</span>
+              <p className="terms-desc">{terms.paymentDesc}</p>
             </div>
           </div>
 
@@ -542,10 +543,8 @@ export default function CommissionPriceList() {
               <ArrowsClockwise size={20} weight="bold" />
             </div>
             <div className="terms-info">
-              <span className="terms-label">Revision Policy</span>
-              <p className="terms-desc">
-                Up to <strong>3x free revisions</strong> during sketch stage. Extra revisions start from <strong>+Rp 10.000/rev</strong>. Coloring stage only allows color adjustments.
-              </p>
+              <span className="terms-label">{terms.revisionLabel}</span>
+              <p className="terms-desc">{terms.revisionDesc}</p>
             </div>
           </div>
 
@@ -555,13 +554,15 @@ export default function CommissionPriceList() {
               <CheckCircle size={20} weight="bold" />
             </div>
             <div className="terms-info">
-              <span className="terms-label">Do &amp; Don&apos;t Guidelines</span>
+              <span className="terms-label">{terms.dodontLabel}</span>
               <div className="terms-dodont-group">
                 <p className="terms-desc">
-                  <strong>DO:</strong> Male/Female, Fanart/OCs, Couple/Yumeship.
+                  <strong>{terms.doText.slice(0, terms.doText.indexOf(':') + 1)}</strong>
+                  {terms.doText.slice(terms.doText.indexOf(':') + 1)}
                 </p>
                 <p className="terms-desc">
-                  <strong>DON'T:</strong> NSFW (Suggestive is OK), LGBT, Furry, Mecha/Armor, Gore (slight blood is OK), Old character.
+                  <strong>{terms.dontText.slice(0, terms.dontText.indexOf(':') + 1)}</strong>
+                  {terms.dontText.slice(terms.dontText.indexOf(':') + 1)}
                 </p>
               </div>
             </div>

@@ -1,22 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { List, X, Sparkle, ArrowRight, PaintBrushBroad } from '@phosphor-icons/react';
-
-interface NavItem {
-  label: string;
-  href: string;
-}
-
-const navItems: NavItem[] = [
-  { label: 'About', href: '#about' },
-  { label: 'Pricing', href: '#contact' },
-  { label: 'Testimonials', href: '#testimonials' },
-  { label: 'FAQ', href: '#faq' },
-];
+import { useLanguage } from '../utils/i18n';
+import { translations } from '../utils/translations';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { lang } = useLanguage();
+  const t = translations[lang].navbar;
+  const navItems = t.items;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -65,7 +58,7 @@ export default function Navbar() {
           {/* Action CTA & Mobile Toggle */}
           <div className="nav-actions">
             <a href="#contact" className="btn-cta-gold">
-              <span>Get in Touch</span>
+              <span>{t.cta}</span>
               <ArrowRight size={14} weight="bold" className="cta-icon" />
             </a>
 
@@ -160,7 +153,7 @@ export default function Navbar() {
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     <PaintBrushBroad size={18} weight="duotone" />
-                    <span>Get in Touch</span>
+                    <span>{t.cta}</span>
                   </a>
                 </motion.div>
               </div>

@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Sparkle, User, WhatsappLogo, ArrowSquareOut, ClipboardText } from '@phosphor-icons/react';
 import NametageCard from './InteractiveNametag';
+import { useLanguage } from '../utils/i18n';
+import { translations } from '../utils/translations';
 
 // =========================================================================
 // COMMISSION STATUS: Ubah ke 'CLOSED' atau 'OPEN' di sini
@@ -9,6 +11,10 @@ import NametageCard from './InteractiveNametag';
 const COMMISSION_STATUS: 'OPEN' | 'CLOSED' = 'CLOSED';
 
 export default function HeroSection() {
+  const { lang } = useLanguage();
+  const t = translations[lang].hero;
+  const statusText = COMMISSION_STATUS === 'CLOSED' ? t.statusClosed : t.statusOpen;
+
   const name = "Amai Vaelithys";
   const letters = Array.from(name);
 
@@ -68,7 +74,7 @@ export default function HeroSection() {
             <div className="hero-badge-wrap">
               <span className={`badge-gold ${COMMISSION_STATUS === 'CLOSED' ? 'status-badge-closed' : 'status-badge-open'}`}>
                 <span className={`status-indicator-dot ${COMMISSION_STATUS === 'CLOSED' ? 'dot-closed' : 'dot-open'}`} />
-                <span>Commission Status : {COMMISSION_STATUS}</span>
+                <span>{t.statusLabel}{statusText}</span>
               </span>
               <a
                 href="https://trello.com/b/MFek8rz7/rins-commission-tracker"
@@ -78,7 +84,7 @@ export default function HeroSection() {
                 title="View live commission tracker on Trello"
               >
                 <ClipboardText size={13} weight="bold" />
-                <span>Commission Tracker</span>
+                <span>{t.trackerBtn}</span>
                 <ArrowSquareOut size={12} weight="bold" />
               </a>
             </div>
@@ -90,18 +96,31 @@ export default function HeroSection() {
               initial="hidden"
               animate="visible"
             >
-              {letters.map((char, i) => (
-                <motion.span
-                  key={i}
-                  variants={letterVariants}
-                  className={char === ' ' ? 'h-space' : 'h-char wave-char'}
-                  style={{
-                    animationDelay: `${(i * 0.08).toFixed(2)}s`,
-                  }}
-                >
-                  {char === ' ' ? '\u00A0' : char}
-                </motion.span>
-              ))}
+              {name.split(' ').map((word, wIdx) => {
+                const startOffset = wIdx === 0 ? 0 : 5;
+                return (
+                  <React.Fragment key={wIdx}>
+                    {wIdx > 0 && <span style={{ display: 'inline-block', width: '0.28em' }}>&nbsp;</span>}
+                    <span style={{ display: 'inline-block', whiteSpace: 'nowrap' }}>
+                      {Array.from(word).map((char, cIdx) => {
+                        const globalIdx = startOffset + cIdx;
+                        return (
+                          <motion.span
+                            key={cIdx}
+                            variants={letterVariants}
+                            className="h-char wave-char"
+                            style={{
+                              animationDelay: `${(globalIdx * 0.08).toFixed(2)}s`,
+                            }}
+                          >
+                            {char}
+                          </motion.span>
+                        );
+                      })}
+                    </span>
+                  </React.Fragment>
+                );
+              })}
             </motion.h1>
 
             {/* Tagline / Bio */}
@@ -111,7 +130,7 @@ export default function HeroSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.58, ease: [0.16, 1, 0.3, 1] }}
             >
-              Digital Illustrator & Character Concept Artist crafting luminous anime aesthetics, celestial fantasy realms, and bespoke visual narratives.
+              {t.desc}
             </motion.p>
 
             {/* Specialty Pills */}
@@ -121,7 +140,7 @@ export default function HeroSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.68, ease: [0.16, 1, 0.3, 1] }}
             >
-              {['OC & Fan Concepts', 'High-Res Digital Art', 'Character Concepts'].map((tag) => (
+              {t.pills.map((tag) => (
                 <span key={tag} className="spec-pill">{tag}</span>
               ))}
             </motion.div>
@@ -134,13 +153,13 @@ export default function HeroSection() {
               transition={{ duration: 0.6, delay: 0.78, ease: [0.16, 1, 0.3, 1] }}
             >
               <a href="#about" className="btn-primary hero-btn">
-                <User size={16} weight="bold" /><span>About Artist</span>
+                <User size={16} weight="bold" /><span>{t.btnAbout}</span>
               </a>
               <a
                 href="#contact"
                 className="btn-commission-gold hero-btn"
               >
-                <Sparkle size={16} weight="bold" /><span>Order Commission</span>
+                <Sparkle size={16} weight="bold" /><span>{t.btnOrder}</span>
               </a>
             </motion.div>
           </motion.div>
@@ -244,31 +263,99 @@ export default function HeroSection() {
           display: flex;
           flex-direction: column;
           align-items: center;
-          gap: 1.25rem;
+          gap: 1.5rem;
           width: 100%;
           max-width: 1160px;
           margin: 0 auto;
         }
 
-        /* Desktop: Side-by-Side */
+        /* Card Column */
+        .hero-card-col {
+          width: 100%;
+          max-width: 240px;
+          display: flex;
+          justify-content: center;
+        }
+
+        /* Text Column — Mobile (Centered) */
+        .hero-text-col {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          width: 100%;
+          max-width: 100%;
+          box-sizing: border-box;
+        }
+
+        /* Mobile Order Flow: naturally follows DOM order (Badge -> Name -> Desc -> Pills -> Buttons) */
+        .hero-badge-wrap {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.5rem;
+          margin-bottom: 0.85rem;
+        }
+
+        /* Desktop: Precise Alignment & Custom Flow */
         @media (min-width: 820px) {
           .hero-layout {
             flex-direction: row;
-            align-items: flex-start;
+            align-items: center;
             gap: 4.5rem;
           }
 
           .hero-card-col {
             flex-shrink: 0;
             width: 290px;
-            margin-top: -0.25rem;
+            max-width: 320px;
+            margin-top: 0;
           }
 
           .hero-text-col {
             flex: 1;
             align-items: flex-start;
             text-align: left;
-            margin-top: 1.5rem;
+            margin-top: 0;
+          }
+
+          /* On Desktop:
+             1. Name on top
+             2. Description directly under Name
+             3. Status & Tracker buttons placed below Description in a sleek, aligned row
+             4. Feature Pills
+             5. Action Buttons */
+          .hero-name {
+            order: 1;
+            text-align: left;
+            margin-bottom: 0.75rem;
+          }
+
+          .hero-desc {
+            order: 2;
+            text-align: left;
+            margin-bottom: 1.15rem;
+            max-width: 580px;
+          }
+
+          .hero-badge-wrap {
+            order: 3;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 1.35rem;
+          }
+
+          .hero-pills {
+            order: 4;
+            justify-content: flex-start;
+            margin-bottom: 1.5rem;
+          }
+
+          .hero-btns {
+            order: 5;
+            justify-content: flex-start;
           }
         }
 
@@ -281,65 +368,42 @@ export default function HeroSection() {
           }
         }
 
-        /* Card Column */
-        .hero-card-col {
-          width: 100%;
-          max-width: 230px;
-          display: flex;
-          justify-content: center;
-        }
-
-
-
-        @media (min-width: 820px) {
-          .hero-card-col {
-            max-width: 320px;
-          }
-        }
-
-        /* Text Column */
-        .hero-text-col {
-          display: flex;
-          flex-direction: column;
+        .badge-gold {
+          display: inline-flex;
           align-items: center;
-          text-align: center;
-          width: 100%;
-          max-width: 100%;
+          gap: 0.45rem;
+          padding: 0 0.95rem;
+          height: 32px;
+          border-radius: 9999px;
+          font-size: 0.75rem;
+          font-weight: 700;
+          letter-spacing: 0.04em;
+          line-height: 1;
           box-sizing: border-box;
-        }
-
-        /* Badge & Tracker */
-        .hero-badge-wrap {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 0.5rem;
-          margin-bottom: 0.85rem;
-        }
-
-        @media (min-width: 820px) {
-          .hero-badge-wrap {
-            align-items: flex-start;
-          }
+          white-space: nowrap;
         }
 
         .tracker-badge-link {
           display: inline-flex;
           align-items: center;
           gap: 0.4rem;
-          padding: 0.32rem 0.85rem;
-          background: rgba(255, 255, 255, 0.75);
+          padding: 0 0.95rem;
+          height: 32px;
+          background: rgba(255, 255, 255, 0.82);
           backdrop-filter: blur(8px);
           border: 1px solid var(--color-border-subtle);
           border-radius: 9999px;
           color: var(--color-secondary);
-          font-size: 0.76rem;
+          font-size: 0.75rem;
           font-weight: 600;
           letter-spacing: 0.03em;
           text-decoration: none;
+          line-height: 1;
+          box-sizing: border-box;
           box-shadow: 0 2px 6px rgba(30, 42, 69, 0.04);
           transition: all 0.2s ease;
           cursor: pointer;
+          white-space: nowrap;
         }
 
         .tracker-badge-link:hover {

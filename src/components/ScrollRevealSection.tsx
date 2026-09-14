@@ -1,11 +1,14 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
+import { useLanguage } from '../utils/i18n';
+import { translations } from '../utils/translations';
 
 interface ScrollRevealSectionProps {
   id?: string;
   className?: string;
+  sectionKey?: 'about' | 'pricing' | 'testimonials' | 'faq';
   badge?: string;
-  title: string;
+  title?: string;
   subtitle?: string;
   children?: React.ReactNode;
 }
@@ -13,12 +16,19 @@ interface ScrollRevealSectionProps {
 export default function ScrollRevealSection({
   id,
   className = '',
+  sectionKey,
   badge,
-  title,
+  title = '',
   subtitle,
   children,
 }: ScrollRevealSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
+  const { lang } = useLanguage();
+
+  const sectionContent = sectionKey ? translations[lang][sectionKey] : null;
+  const activeBadge = sectionContent?.badge || badge;
+  const activeTitle = sectionContent?.title || title;
+  const activeSubtitle = sectionContent?.subtitle || subtitle;
 
   // Hook into viewport scroll progress for this specific section
   const { scrollYProgress } = useScroll({
@@ -33,17 +43,9 @@ export default function ScrollRevealSection({
     [20, 0, 0, -10]
   );
 
-  // Break title into individual characters (with word/space tracking)
-  const chars: { char: string; isSpace: boolean; charIndex: number }[] = [];
-  let charIdx = 0;
-  title.split(' ').forEach((word, wIdx) => {
-    if (wIdx > 0) {
-      chars.push({ char: ' ', isSpace: true, charIndex: charIdx++ });
-    }
-    Array.from(word).forEach((c) => {
-      chars.push({ char: c, isSpace: false, charIndex: charIdx++ });
-    });
-  });
+  // Break title into words to ensure no word splits mid-letter (e.g. PATR ONS)
+  const words = activeTitle.split(' ');
+  let globalCharIdx = 0;
 
   return (
     <motion.section
@@ -55,7 +57,7 @@ export default function ScrollRevealSection({
       <div className="container">
         {/* Section Header with Staggered Scroll Animation */}
         <div className="section-header-reveal">
-          {badge && (
+          {activeBadge && (
             <motion.div
               className="section-badge-wrap"
               initial={{ opacity: 0, y: 12 }}
@@ -63,7 +65,7 @@ export default function ScrollRevealSection({
               viewport={{ once: false, margin: '-40px' }}
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             >
-              <span className="badge-gold">✦ {badge} ✦</span>
+              <span className="badge-gold">✦ {activeBadge} ✦</span>
             </motion.div>
           )}
 
@@ -82,51 +84,61 @@ export default function ScrollRevealSection({
               },
             }}
           >
-            {chars.map(({ char, isSpace, charIndex }) =>
-              isSpace ? (
-                <span key={charIndex} className="word-space">&nbsp;</span>
-              ) : (
-                <motion.span
-                  key={charIndex}
-                  className="char-reveal section-wave-char"
-                  style={{
-                    animationDelay: `${(charIndex * 0.08).toFixed(2)}s`,
-                  }}
-                  variants={{
-                    hidden: {
-                      opacity: 0,
-                      y: 20,
-                      rotateX: -60,
-                      filter: 'blur(3px)',
-                    },
-                    visible: {
-                      opacity: 1,
-                      y: 0,
-                      rotateX: 0,
-                      filter: 'blur(0px)',
-                      transition: {
-                        type: 'spring',
-                        damping: 14,
-                        stiffness: 110,
-                      },
-                    },
-                  }}
-                >
-                  {char}
-                </motion.span>
-              )
-            )}
+            {words.map((word, wIdx) => (
+              <React.Fragment key={wIdx}>
+                {wIdx > 0 && (
+                  <span className="word-space" style={{ display: 'inline-block', width: '0.28em' }}>
+                    &nbsp;
+                  </span>
+                )}
+                <span className="word-wrapper" style={{ display: 'inline-block', whiteSpace: 'nowrap' }}>
+                  {Array.from(word).map((char) => {
+                    const charIndex = globalCharIdx++;
+                    return (
+                      <motion.span
+                        key={charIndex}
+                        className="char-reveal section-wave-char"
+                        style={{
+                          animationDelay: `${(charIndex * 0.08).toFixed(2)}s`,
+                        }}
+                        variants={{
+                          hidden: {
+                            opacity: 0,
+                            y: 20,
+                            rotateX: -60,
+                            filter: 'blur(3px)',
+                          },
+                          visible: {
+                            opacity: 1,
+                            y: 0,
+                            rotateX: 0,
+                            filter: 'blur(0px)',
+                            transition: {
+                              type: 'spring',
+                              damping: 14,
+                              stiffness: 110,
+                            },
+                          },
+                        }}
+                      >
+                        {char}
+                      </motion.span>
+                    );
+                  })}
+                </span>
+              </React.Fragment>
+            ))}
           </motion.h2>
 
-          {subtitle && (
+          {activeSubtitle && (
             <motion.p
               className="section-reveal-subtitle"
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: false, margin: '-40px' }}
-              transition={{ duration: 0.55, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.55, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             >
-              {subtitle}
+              {activeSubtitle}
             </motion.p>
           )}
         </div>
