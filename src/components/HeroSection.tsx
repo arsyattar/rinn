@@ -1,6 +1,6 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { Sparkle, User, WhatsappLogo } from '@phosphor-icons/react';
+import { Sparkle, User, WhatsappLogo, ArrowSquareOut, ClipboardText } from '@phosphor-icons/react';
 import NametageCard from './InteractiveNametag';
 
 // =========================================================================
@@ -64,12 +64,23 @@ export default function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.75, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
           >
-            {/* Status Badge */}
+            {/* Status Badge & Tracker */}
             <div className="hero-badge-wrap">
               <span className={`badge-gold ${COMMISSION_STATUS === 'CLOSED' ? 'status-badge-closed' : 'status-badge-open'}`}>
                 <span className={`status-indicator-dot ${COMMISSION_STATUS === 'CLOSED' ? 'dot-closed' : 'dot-open'}`} />
                 <span>Commission Status : {COMMISSION_STATUS}</span>
               </span>
+              <a
+                href="https://trello.com/b/MFek8rz7/rins-commission-tracker"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="tracker-badge-link"
+                title="View live commission tracker on Trello"
+              >
+                <ClipboardText size={13} weight="bold" />
+                <span>Commission Tracker</span>
+                <ArrowSquareOut size={12} weight="bold" />
+              </a>
             </div>
 
             {/* Animated Name with Periodic 5s Wave */}
@@ -297,9 +308,50 @@ export default function HeroSection() {
           box-sizing: border-box;
         }
 
-        /* Badge */
+        /* Badge & Tracker */
         .hero-badge-wrap {
-          margin-bottom: 0.75rem;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.5rem;
+          margin-bottom: 0.85rem;
+        }
+
+        @media (min-width: 820px) {
+          .hero-badge-wrap {
+            align-items: flex-start;
+          }
+        }
+
+        .tracker-badge-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.4rem;
+          padding: 0.32rem 0.85rem;
+          background: rgba(255, 255, 255, 0.75);
+          backdrop-filter: blur(8px);
+          border: 1px solid var(--color-border-subtle);
+          border-radius: 9999px;
+          color: var(--color-secondary);
+          font-size: 0.76rem;
+          font-weight: 600;
+          letter-spacing: 0.03em;
+          text-decoration: none;
+          box-shadow: 0 2px 6px rgba(30, 42, 69, 0.04);
+          transition: all 0.2s ease;
+          cursor: pointer;
+        }
+
+        .tracker-badge-link:hover {
+          background: #FFFFFF;
+          border-color: var(--color-primary);
+          color: var(--color-text-gold);
+          box-shadow: 0 4px 12px rgba(201, 166, 107, 0.22);
+          transform: translateY(-1.5px);
+        }
+
+        .tracker-badge-link:active {
+          transform: translateY(0);
         }
 
         .status-indicator-dot {
