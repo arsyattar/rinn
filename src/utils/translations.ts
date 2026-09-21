@@ -210,6 +210,8 @@ export const translations: Record<Language, Translations> = {
             '/photo/Half_Body/halfbody2.webp',
             '/photo/Half_Body/halfbody3.webp',
             '/photo/Half_Body/couple6.webp',
+            '/photo/Half_Body/halfbody8.webp',
+            '/photo/Half_Body/halfbody9.webp',
           ],
           features: [
             'Pose kustom dinamis',
@@ -455,6 +457,8 @@ export const translations: Record<Language, Translations> = {
             '/photo/Half_Body/halfbody2.webp',
             '/photo/Half_Body/halfbody3.webp',
             '/photo/Half_Body/couple6.webp',
+            '/photo/Half_Body/halfbody8.webp',
+            '/photo/Half_Body/halfbody9.webp',
           ],
           features: [
             'Custom pose',

@@ -84,6 +84,22 @@ const handoversData: HandoverTestimonial[] = [
     rating: 5,
     date: 'Verified Client',
   },
+  {
+    id: 10,
+    clientName: 'Sh*',
+    commissionType: 'Client Handover',
+    chatScreenshot: '/photo/testimoni/10_Sha.webp',
+    rating: 5,
+    date: 'Verified Client',
+  },
+  {
+    id: 11,
+    clientName: 'Ab******ine',
+    commissionType: 'Client Handover',
+    chatScreenshot: '/photo/testimoni/11_abstractnine.webp',
+    rating: 5,
+    date: 'Verified Client',
+  },
 ];
 
 let slideCounter = 0;
