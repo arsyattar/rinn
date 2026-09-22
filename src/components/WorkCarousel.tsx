@@ -14,7 +14,7 @@ const categoriesData: CategoryItem[] = [
   {
     id: 'bust-up',
     title: 'Bust Up',
-    price: 'Rp 80.000',
+    price: 'Rp 140.000',
     images: [
       '/photo/bust_up/bust_up1.webp',
       '/photo/bust_up/bust_up2.webp',
@@ -36,7 +36,7 @@ const categoriesData: CategoryItem[] = [
   {
     id: 'half-body',
     title: 'Half Body',
-    price: 'Rp 150.000',
+    price: 'Rp 250.000',
     images: [
       '/photo/Half_Body/halfbody1.webp',
       '/photo/Half_Body/halfbody2.webp',
@@ -49,7 +49,7 @@ const categoriesData: CategoryItem[] = [
   {
     id: 'full-body',
     title: 'Full Body',
-    price: 'Rp 200.000',
+    price: 'Rp 300.000',
     images: [
       '/photo/full_body/fullbody1.webp',
       '/photo/full_body/fullbody2.webp',
@@ -61,14 +61,14 @@ const categoriesData: CategoryItem[] = [
   {
     id: 'charasheet-simple',
     title: 'Character Sheet (Simple)',
-    price: 'Rp 250.000',
+    price: 'Rp 350.000',
     priceNote: 'Start from',
     images: ['/photo/charactersheet_simple/simple1.webp'],
   },
   {
     id: 'genshin-drip',
     title: 'Genshin Drip Art',
-    price: 'Rp 260.000',
+    price: 'Rp 400.000',
     images: [
       '/photo/genshin_drip_marketing/drip_marketing1.webp',
       '/photo/genshin_drip_marketing/drip_marketing2.webp',
@@ -79,7 +79,7 @@ const categoriesData: CategoryItem[] = [
   {
     id: 'charasheet-overdetailed',
     title: 'Character Sheet (Overdetailed)',
-    price: 'Rp 500.000',
+    price: 'Rp 700.000',
     priceNote: 'Start from',
     images: ['/photo/charactersheet_overdetailed/overdetailed1.webp'],
   },

@@ -69,7 +69,7 @@ const pricingPlans: PricingPlan[] = [
     id: 'bust-up',
     name: 'Bust Up',
     subtitle: 'Head to chest portrait illustration',
-    price: 'Rp 80.000',
+    price: 'Rp 140.000',
     popular: true,
     badge: 'Popular Choice',
     images: [
@@ -87,7 +87,7 @@ const pricingPlans: PricingPlan[] = [
       'High-resolution PNG file',
     ],
     waTemplate:
-      'Hello Amai Vaelithys! I would like to order a *Bust Up* commission (Rp 80.000).',
+      'Hello Amai Vaelithys! I would like to order a *Bust Up* commission (Rp 140.000).',
   },
   {
     id: 'genshin-icon',
@@ -112,7 +112,7 @@ const pricingPlans: PricingPlan[] = [
     id: 'half-body',
     name: 'Half Body',
     subtitle: 'Head to waist / thigh artwork',
-    price: 'Rp 150.000',
+    price: 'Rp 250.000',
     images: [
       '/photo/Half_Body/halfbody1.webp',
       '/photo/Half_Body/halfbody2.webp',
@@ -127,13 +127,13 @@ const pricingPlans: PricingPlan[] = [
       'High-res PNG + transparent background',
     ],
     waTemplate:
-      'Hello Amai Vaelithys! I would like to order a *Half Body* commission (Rp 150.000).',
+      'Hello Amai Vaelithys! I would like to order a *Half Body* commission (Rp 250.000).',
   },
   {
     id: 'full-body',
     name: 'Full Body',
     subtitle: 'Complete head-to-toe illustration',
-    price: 'Rp 200.000',
+    price: 'Rp 300.000',
     images: [
       '/photo/full_body/fullbody1.webp',
       '/photo/full_body/fullbody2.webp',
@@ -148,13 +148,13 @@ const pricingPlans: PricingPlan[] = [
       'High-res PNG + transparent background',
     ],
     waTemplate:
-      'Hello Amai Vaelithys! I would like to order a *Full Body* commission (Rp 200.000).',
+      'Hello Amai Vaelithys! I would like to order a *Full Body* commission (Rp 300.000).',
   },
   {
     id: 'charasheet-simple',
     name: 'Character Sheet (Simple)',
     subtitle: 'Turnaround reference & avatar sheet',
-    price: 'Rp 250.000',
+    price: 'Rp 350.000',
     priceNote: 'Start from',
     images: ['/photo/charactersheet_simple/simple1.webp'],
     features: [
@@ -164,13 +164,13 @@ const pricingPlans: PricingPlan[] = [
       'Ideal for VTuber / OC design reference',
     ],
     waTemplate:
-      'Hello Amai Vaelithys! I would like to order a *Character Sheet (Simple)* commission (Start from Rp 250.000).',
+      'Hello Amai Vaelithys! I would like to order a *Character Sheet (Simple)* commission (Start from Rp 350.000).',
   },
   {
     id: 'genshin-drip',
     name: 'Genshin Drip Marketing',
     subtitle: 'Genshin-style character render art',
-    price: 'Rp 260.000',
+    price: 'Rp 400.000',
     popular: true,
     badge: 'Signature Style',
     images: [
@@ -186,13 +186,13 @@ const pricingPlans: PricingPlan[] = [
       'Ultra high-res PNG + transparent',
     ],
     waTemplate:
-      'Hello Amai Vaelithys! I would like to order a *Genshin Drip Marketing* commission (Rp 260.000).',
+      'Hello Amai Vaelithys! I would like to order a *Genshin Drip Marketing* commission (Rp 400.000).',
   },
   {
     id: 'charasheet-overdetailed',
     name: 'Character Sheet (Overdetailed)',
     subtitle: 'Master tier multi-angle reference sheet',
-    price: 'Rp 500.000',
+    price: 'Rp 700.000',
     priceNote: 'Start from',
     badge: 'Master Reference',
     images: ['/photo/charactersheet_overdetailed/overdetailed1.webp'],
@@ -203,7 +203,7 @@ const pricingPlans: PricingPlan[] = [
       'Lore summary & character specs',
     ],
     waTemplate:
-      'Hello Amai Vaelithys! I would like to order a *Character Sheet (Overdetailed)* commission (Start from Rp 500.000).',
+      'Hello Amai Vaelithys! I would like to order a *Character Sheet (Overdetailed)* commission (Start from Rp 700.000).',
   },
 ];
 
