@@ -44,6 +44,7 @@ import {
   ArrowsClockwise,
   Users,
   Image,
+  Lightning,
   CaretDown,
   CaretLeft,
   CaretRight,
@@ -380,6 +381,15 @@ export default function CommissionPriceList() {
 
   return (
     <div className="pricing-wrapper">
+      {/* Quick Jump Pill to Add-ons & Guidelines */}
+      <div className="pricing-quick-nav">
+        <a href="#pricing-terms" className="quick-terms-btn">
+          <Sparkle size={14} weight="fill" />
+          <span>View Add-ons & Guidelines</span>
+          <CaretDown size={14} weight="bold" />
+        </a>
+      </div>
+
       {/* 7 Pricing Cards with Embedded Image Swiper */}
       <div className="pricing-grid">
         {pricingPlans.map((plan) => {
@@ -497,6 +507,7 @@ export default function CommissionPriceList() {
 
       {/* Commission Terms & Policy Box */}
       <motion.div
+        id="pricing-terms"
         className="terms-box card-royal"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -509,63 +520,106 @@ export default function CommissionPriceList() {
           <div className="terms-gem" />
         </div>
 
-        <div className="terms-grid">
-          <div className="terms-item">
-            <div className="terms-icon-wrap">
-              <Image size={20} weight="bold" />
+        {/* Section 1: Biaya Tambahan (Add-ons) */}
+        <div className="terms-subgroup">
+          <h5 className="terms-subgroup-title">
+            <Sparkle size={15} weight="fill" />
+            <span>{pricingData.termsAddonsTitle}</span>
+          </h5>
+          <div className="terms-grid terms-addons-grid">
+            {/* Background */}
+            <div className="terms-item terms-item-addon">
+              <div className="terms-icon-wrap">
+                <Image size={20} weight="bold" />
+              </div>
+              <div className="terms-info">
+                <span className="terms-label">{terms.backgroundLabel}</span>
+                <span className="terms-price-badge">{terms.backgroundDesc}</span>
+              </div>
             </div>
-            <div className="terms-info">
-              <span className="terms-label">{terms.detailsLabel}</span>
-              <p className="terms-desc">{terms.detailsDesc}</p>
+
+            {/* Rush Fee */}
+            <div className="terms-item terms-item-addon">
+              <div className="terms-icon-wrap">
+                <Lightning size={20} weight="bold" />
+              </div>
+              <div className="terms-info">
+                <span className="terms-label">{terms.rushFeeLabel}</span>
+                <span className="terms-price-badge">{terms.rushFeeDesc}</span>
+              </div>
+            </div>
+
+            {/* Details Fee */}
+            <div className="terms-item terms-item-addon">
+              <div className="terms-icon-wrap">
+                <Sparkle size={20} weight="bold" />
+              </div>
+              <div className="terms-info">
+                <span className="terms-label">{terms.detailsLabel}</span>
+                <span className="terms-price-badge">{terms.detailsDesc}</span>
+              </div>
+            </div>
+
+            {/* Commercial */}
+            <div className="terms-item terms-item-addon">
+              <div className="terms-icon-wrap">
+                <Users size={20} weight="bold" />
+              </div>
+              <div className="terms-info">
+                <span className="terms-label">{terms.commercialLabel}</span>
+                <p className="terms-desc">{terms.commercialDesc}</p>
+              </div>
             </div>
           </div>
+        </div>
 
-          <div className="terms-item">
-            <div className="terms-icon-wrap">
-              <Users size={20} weight="bold" />
-            </div>
-            <div className="terms-info">
-              <span className="terms-label">{terms.commercialLabel}</span>
-              <p className="terms-desc">{terms.commercialDesc}</p>
-            </div>
-          </div>
+        {/* Decorative Divider */}
+        <div className="terms-divider" />
 
-          <div className="terms-item">
-            <div className="terms-icon-wrap">
-              <CreditCard size={20} weight="bold" />
+        {/* Section 2: Ketentuan & Alur Pengerjaan (Guidelines & Workflow) */}
+        <div className="terms-subgroup">
+          <h5 className="terms-subgroup-title">
+            <Sparkle size={15} weight="fill" />
+            <span>{pricingData.termsRulesTitle}</span>
+          </h5>
+          <div className="terms-grid">
+            <div className="terms-item">
+              <div className="terms-icon-wrap">
+                <CreditCard size={20} weight="bold" />
+              </div>
+              <div className="terms-info">
+                <span className="terms-label">{terms.paymentLabel}</span>
+                <p className="terms-desc">{terms.paymentDesc}</p>
+              </div>
             </div>
-            <div className="terms-info">
-              <span className="terms-label">{terms.paymentLabel}</span>
-              <p className="terms-desc">{terms.paymentDesc}</p>
-            </div>
-          </div>
 
-          <div className="terms-item">
-            <div className="terms-icon-wrap">
-              <ArrowsClockwise size={20} weight="bold" />
+            <div className="terms-item">
+              <div className="terms-icon-wrap">
+                <ArrowsClockwise size={20} weight="bold" />
+              </div>
+              <div className="terms-info">
+                <span className="terms-label">{terms.revisionLabel}</span>
+                <p className="terms-desc">{terms.revisionDesc}</p>
+              </div>
             </div>
-            <div className="terms-info">
-              <span className="terms-label">{terms.revisionLabel}</span>
-              <p className="terms-desc">{terms.revisionDesc}</p>
-            </div>
-          </div>
 
-          {/* Do & Don't Guidelines — single matching card */}
-          <div className="terms-item terms-item-full">
-            <div className="terms-icon-wrap">
-              <CheckCircle size={20} weight="bold" />
-            </div>
-            <div className="terms-info">
-              <span className="terms-label">{terms.dodontLabel}</span>
-              <div className="terms-dodont-group">
-                <p className="terms-desc">
-                  <strong>{terms.doText.slice(0, terms.doText.indexOf(':') + 1)}</strong>
-                  {terms.doText.slice(terms.doText.indexOf(':') + 1)}
-                </p>
-                <p className="terms-desc">
-                  <strong>{terms.dontText.slice(0, terms.dontText.indexOf(':') + 1)}</strong>
-                  {terms.dontText.slice(terms.dontText.indexOf(':') + 1)}
-                </p>
+            {/* Do & Don't Guidelines */}
+            <div className="terms-item terms-item-full">
+              <div className="terms-icon-wrap">
+                <CheckCircle size={20} weight="bold" />
+              </div>
+              <div className="terms-info">
+                <span className="terms-label">{terms.dodontLabel}</span>
+                <div className="terms-dodont-group">
+                  <p className="terms-desc">
+                    <strong>{terms.doText.slice(0, terms.doText.indexOf(':') + 1)}</strong>
+                    {terms.doText.slice(terms.doText.indexOf(':') + 1)}
+                  </p>
+                  <p className="terms-desc">
+                    <strong>{terms.dontText.slice(0, terms.dontText.indexOf(':') + 1)}</strong>
+                    {terms.dontText.slice(terms.dontText.indexOf(':') + 1)}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -1157,6 +1211,79 @@ export default function CommissionPriceList() {
           display: flex;
           flex-direction: column;
           gap: 0.35rem;
+        }
+
+        /* Quick Jump to Terms */
+        .pricing-quick-nav {
+          display: flex;
+          justify-content: center;
+          margin-bottom: 2rem;
+        }
+
+        .quick-terms-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.55rem 1.25rem;
+          border-radius: 9999px;
+          background: rgba(255, 255, 255, 0.9);
+          border: 1.5px solid var(--color-border-gold);
+          color: var(--color-secondary);
+          font-size: 0.85rem;
+          font-weight: 700;
+          text-decoration: none;
+          box-shadow: 0 4px 14px rgba(201, 166, 107, 0.15);
+          transition: all var(--transition-fast);
+          backdrop-filter: blur(8px);
+        }
+
+        .quick-terms-btn:hover {
+          background: var(--color-primary);
+          color: #FFFFFF;
+          border-color: var(--color-primary);
+          box-shadow: 0 6px 20px rgba(201, 166, 107, 0.35);
+          transform: translateY(-2px);
+        }
+
+        /* Terms Subgroups */
+        .terms-subgroup {
+          margin-bottom: 1.75rem;
+        }
+
+        .terms-subgroup:last-child {
+          margin-bottom: 0;
+        }
+
+        .terms-subgroup-title {
+          font-family: var(--font-serif);
+          font-size: 0.98rem;
+          font-weight: 700;
+          color: var(--color-text-gold);
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          margin-bottom: 1.15rem;
+          padding-bottom: 0.45rem;
+          border-bottom: 1px dashed var(--color-border-gold);
+        }
+
+        .terms-price-badge {
+          display: inline-block;
+          font-weight: 700;
+          font-size: 0.92rem;
+          color: var(--color-secondary);
+          background: var(--color-primary-subtle);
+          padding: 0.2rem 0.65rem;
+          border-radius: 0.5rem;
+          border: 1px solid var(--color-border-gold);
+          width: fit-content;
+        }
+
+        .terms-divider {
+          height: 1px;
+          background: linear-gradient(90deg, transparent, var(--color-border-gold), transparent);
+          margin: 1.85rem 0;
+          opacity: 0.6;
         }
       `}</style>
     </div>

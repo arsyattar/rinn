@@ -15,9 +15,8 @@ export default function FAQAccordion() {
     answer: item.answer,
   }));
 
-  const waInquiryTemplate = lang === 'id'
-    ? 'Halo Amai Vaelithys! Saya mengunjungi website portofolio Anda dan ingin bertanya terkait komisi / proyek kustom:\n\n• Nama / Akun:\n• Pertanyaan:'
-    : 'Hello Amai Vaelithys! I visited your portfolio website and have a question regarding commissions / custom projects:\n\n• Name / Handle:\n• Question / Inquiries:';
+  const waInquiryTemplate =
+    'Hello Amai Vaelithys! I visited your portfolio website and have a question regarding commissions / custom projects:\n\n• Name / Handle:\n• Question / Inquiries:';
   const encodedInquiry = encodeURIComponent(waInquiryTemplate);
   const waInquiryUrl = `https://wa.me/${waPhoneNumber}?text=${encodedInquiry}`;
 
@@ -94,7 +93,7 @@ export default function FAQAccordion() {
             <ChatDots size={24} weight="bold" />
           </div>
           <div className="faq-inquiry-text">
-            <h4 className="faq-inquiry-title">{lang === 'id' ? 'Masih punya pertanyaan?' : 'Still have questions?'}</h4>
+            <h4 className="faq-inquiry-title">Still have questions?</h4>
             <p className="faq-inquiry-desc">
               {faqData.helpPrompt}
             </p>

@@ -16,19 +16,12 @@ export default function Footer() {
     { name: 'Discord', url: 'https://discord.gg/VYRmxNygZg', handle: '@nerinn299' },
   ];
 
-  const quickLinks = isId
-    ? [
-        { label: 'Tentang Artis', href: '#about' },
-        { label: 'Daftar Harga Komisi', href: '#contact' },
-        { label: 'Ulasan Klien', href: '#testimonials' },
-        { label: 'Pertanyaan Umum (FAQ)', href: '#faq' },
-      ]
-    : [
-        { label: 'Artist Biography', href: '#about' },
-        { label: 'Commission Price List', href: '#contact' },
-        { label: 'Client Reviews', href: '#testimonials' },
-        { label: 'Frequently Asked Questions', href: '#faq' },
-      ];
+  const quickLinks = [
+    { label: 'Artist Biography', href: '#about' },
+    { label: 'Commission Price List', href: '#contact' },
+    { label: 'Client Reviews', href: '#testimonials' },
+    { label: 'Frequently Asked Questions', href: '#faq' },
+  ];
 
   return (
     <footer className="site-footer">
